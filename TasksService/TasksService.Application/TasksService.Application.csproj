@@ -7,4 +7,11 @@
         <RootNamespace>Application</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Contracts\" />
+      <Folder Include="DataTransferObjects\" />
+      <Folder Include="MappingProfiles\" />
+      <Folder Include="UseCases\" />
+    </ItemGroup>
+
 </Project>
