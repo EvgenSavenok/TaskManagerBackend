@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Application</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Contracts\" />
+      <Folder Include="DataTransferObjects\" />
+      <Folder Include="MappingProfiles\" />
+      <Folder Include="UseCases\" />
+    </ItemGroup>
+
+</Project>
