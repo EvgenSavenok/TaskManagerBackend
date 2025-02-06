@@ -8,10 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Contracts\" />
-      <Folder Include="DataTransferObjects\" />
-      <Folder Include="MappingProfiles\" />
-      <Folder Include="UseCases\" />
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TasksService.Domain\TasksService.Domain.csproj" />
     </ItemGroup>
 
 </Project>
