@@ -1,23 +1,19 @@
-﻿using Application.Contracts.UseCasesContracts;
-using Application.DataTransferObjects.TasksDto;
+﻿using Application.DataTransferObjects.TasksDto;
+using Application.UseCases.Commands.TaskCommands;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TasksService.Presentation.Controllers;
 
 [Route("api/tasks")]
 [ApiController]
-public class TasksController : Controller
+public class TasksController(
+    IMediator mediator) : Controller
 {
-    private ICreateTaskUseCase _createTaskUseCase;
-    public TasksController(ICreateTaskUseCase createTaskUseCase)
-    {
-        _createTaskUseCase = createTaskUseCase;
-    }
-    
     [HttpPost("addTask")]
-    public async Task<IActionResult> CreateTask([FromBody]TaskForCreationDto taskDto)
+    public async Task<IActionResult> CreateTask([FromBody]CreateTaskCommand command)
     {
-        await _createTaskUseCase.ExecuteAsync(taskDto);   
+        await mediator.Send(command);
         return Ok();
     }
 }

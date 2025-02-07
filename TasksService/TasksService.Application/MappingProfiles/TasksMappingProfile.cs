@@ -1,4 +1,5 @@
 ﻿using Application.DataTransferObjects.TasksDto;
+using Application.UseCases.Commands.TaskCommands;
 using AutoMapper;
 using TasksService.Domain.Models;
 
@@ -8,8 +9,9 @@ public class TasksMappingProfile : Profile
 {
     public TasksMappingProfile()
     {
-        //Is it necessary to make all mappings?
         CreateMap<CustomTask, TaskDto>().ReverseMap();
+        
+        CreateMap<CreateTaskCommand, CustomTask>();
         
         CreateMap<TaskForCreationDto, CustomTask>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid())) 

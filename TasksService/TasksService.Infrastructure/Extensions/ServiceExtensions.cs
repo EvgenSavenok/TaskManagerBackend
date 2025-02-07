@@ -1,6 +1,6 @@
 ﻿using Application.Contracts.RepositoryContracts;
-using Application.Contracts.UseCasesContracts;
-using Application.UseCases;
+using Application.Validation;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,11 +50,8 @@ public static class ServiceExtensions
     public static void ConfigureRepositoryManager(this IServiceCollection services) =>
         services.AddScoped<IRepositoryManager, RepositoryManager>();
     
-    public static IServiceCollection AddUseCases(this IServiceCollection services)
+    public static void AddValidators(this IServiceCollection services)
     {
-        //Tasks use cases
-        services.AddScoped<ICreateTaskUseCase, CreateTaskUseCase>();
-        
-        return services;
+        services.AddValidatorsFromAssemblyContaining<TaskValidator>();
     }
 }
