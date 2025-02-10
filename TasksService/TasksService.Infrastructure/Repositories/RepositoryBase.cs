@@ -16,18 +16,34 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
         await (!trackChanges ?
             _repositoryContext.Set<T>()
                 .AsNoTracking() :
-            _repositoryContext.Set<T>()).ToListAsync(cancellationToken);
+            _repositoryContext.Set<T>()).ToListAsync(cancellationToken: cancellationToken);
     
-    public async Task<IEnumerable<T>> FindByCondition(Expression<Func<T, bool>> expression,
-        bool trackChanges, CancellationToken cancellationToken) =>
+    public async Task<IEnumerable<T>> FindByCondition(
+        Expression<Func<T, bool>> expression,
+        bool trackChanges,
+        CancellationToken cancellationToken) =>
         await (!trackChanges ?
             _repositoryContext.Set<T>()
                 .Where(expression)
                 .AsNoTracking() :
             _repositoryContext.Set<T>()
-                .Where(expression)).ToListAsync(cancellationToken);
+                .Where(expression)).ToListAsync(cancellationToken: cancellationToken);
     
-    public void Create(T entity) => _repositoryContext.Set<T>().Add(entity);
-    public void Update(T entity) => _repositoryContext.Set<T>().Update(entity);
-    public void Delete(T entity) => _repositoryContext.Set<T>().Remove(entity);
+    public async Task Create(T entity, CancellationToken cancellationToken = default)
+    {
+        await _repositoryContext.Set<T>().AddAsync(entity, cancellationToken); 
+        await _repositoryContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task Update(T entity, CancellationToken cancellationToken = default)
+    {
+        _repositoryContext.Set<T>().Update(entity); 
+        await _repositoryContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task Delete(T entity, CancellationToken cancellationToken = default)
+    {
+        _repositoryContext.Set<T>().Remove(entity);
+        await _repositoryContext.SaveChangesAsync(cancellationToken);
+    }
 }

@@ -1,4 +1,6 @@
-﻿namespace TasksService.Domain.Models;
+﻿using TasksService.Domain.Models.Enums;
+
+namespace TasksService.Domain.Models;
 
 public class CustomTask
 {
@@ -11,6 +13,6 @@ public class CustomTask
     public DateTime Deadline { get; set; }
     public DateTime CreatedAt { get; set; }
     
-    public virtual ICollection<Tag> TaskTags { get; set; } = new List<Tag>();
-    public virtual ICollection<Comment> TaskComments { get; set; } = new List<Comment>();
+    public ICollection<Tag> TaskTags { get; set; } = new List<Tag>();
+    public ICollection<Comment> TaskComments { get; set; } = new List<Comment>();
 }

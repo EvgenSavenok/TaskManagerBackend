@@ -1,9 +1,9 @@
 ﻿using System.Net;
-using Application.CustomExceptions;
 using Application.ErrorModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using TasksService.Domain.CustomExceptions;
 
 namespace TasksService.Infrastructure.Extensions;
 

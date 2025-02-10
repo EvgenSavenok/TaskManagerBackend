@@ -4,5 +4,5 @@ namespace Application.Contracts.UseCasesContracts.Tasks;
 
 public interface ICreateTaskUseCase
 {
-    public Task ExecuteAsync(TaskForCreationDto taskDto);
+    public Task ExecuteAsync(TaskDto taskDto);
 }

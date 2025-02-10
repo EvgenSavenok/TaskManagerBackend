@@ -1,4 +1,4 @@
-﻿namespace TasksService.Domain.Models;
+﻿namespace TasksService.Domain.Models.Enums;
 
 public enum Priority
 {

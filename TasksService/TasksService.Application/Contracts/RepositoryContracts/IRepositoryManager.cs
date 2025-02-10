@@ -3,5 +3,4 @@
 public interface IRepositoryManager
 {
     ITasksRepository Task { get; }
-    Task SaveAsync();
 }

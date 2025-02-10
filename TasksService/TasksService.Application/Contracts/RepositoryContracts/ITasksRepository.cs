@@ -4,7 +4,5 @@ namespace Application.Contracts.RepositoryContracts;
 
 public interface ITasksRepository : IRepositoryBase<CustomTask>
 {
-    Task<IEnumerable<Task>> GetAllTasksAsync(bool trackChanges);
-    Task<Task> GetTaskAsync(int bookId, bool trackChanges);
-    Task<int> CountTasksAsync();
+    Task<CustomTask?> GetTaskByIdAsync(Guid taskId, bool trackChanges, CancellationToken cancellationToken);
 }
