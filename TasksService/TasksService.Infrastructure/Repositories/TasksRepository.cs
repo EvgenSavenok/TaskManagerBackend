@@ -1,4 +1,6 @@
 ﻿using Application.Contracts.RepositoryContracts;
+using Application.DataTransferObjects.TasksDto;
+using AutoMapper;
 using TasksService.Domain.Models;
 
 namespace TasksService.Infrastructure.Repositories;
@@ -8,7 +10,11 @@ public class TasksRepository(ApplicationContext repositoryContext)
 {
     public async Task<CustomTask?> GetTaskByIdAsync(Guid taskId, bool trackChanges, CancellationToken cancellationToken)
     {
-        IEnumerable<CustomTask?> task = await FindByCondition(c => c.Id.Equals(taskId), trackChanges, cancellationToken);
-        return task.SingleOrDefault();
+        var taskWithTags = await FindByCondition(
+            t => t.Id == taskId, 
+            trackChanges: false, 
+            cancellationToken, 
+            t => t.TaskTags);
+        return taskWithTags.FirstOrDefault();
     }
 }

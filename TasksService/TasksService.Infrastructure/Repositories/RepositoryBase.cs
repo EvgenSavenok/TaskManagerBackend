@@ -21,13 +21,27 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     public async Task<IEnumerable<T>> FindByCondition(
         Expression<Func<T, bool>> expression,
         bool trackChanges,
-        CancellationToken cancellationToken) =>
-        await (!trackChanges ?
-            _repositoryContext.Set<T>()
-                .Where(expression)
-                .AsNoTracking() :
-            _repositoryContext.Set<T>()
-                .Where(expression)).ToListAsync(cancellationToken: cancellationToken);
+        CancellationToken cancellationToken,
+        params Expression<Func<T, object>>[] includes)
+    {
+        IQueryable<T> query = _repositoryContext.Set<T>();
+
+        if (!trackChanges)
+            query = query.AsNoTracking();
+
+        query = query.Where(expression);
+
+        if (includes is { Length: > 0 })
+        {
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+        }
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
     
     public async Task Create(T entity, CancellationToken cancellationToken = default)
     {

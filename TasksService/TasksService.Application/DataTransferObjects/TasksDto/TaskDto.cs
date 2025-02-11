@@ -1,4 +1,5 @@
-﻿using TasksService.Domain.Models;
+﻿using Application.DataTransferObjects.TagsDto;
+using TasksService.Domain.Models;
 using TasksService.Domain.Models.Enums;
 
 namespace Application.DataTransferObjects.TasksDto;
@@ -14,6 +15,6 @@ public record TaskDto
     public DateTime Deadline { get; set; }
     public DateTime CreatedAt { get; set; }
     
-    public ICollection<Tag> TaskTags { get; set; } = new List<Tag>();
+    public List<TagDto> TaskTags { get; set; } = new();
     public ICollection<Comment> TaskComments { get; set; } = new List<Comment>();
 }

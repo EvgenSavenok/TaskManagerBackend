@@ -1,4 +1,5 @@
 ﻿using Application.Contracts.RepositoryContracts;
+using Application.DataTransferObjects.TasksDto;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
