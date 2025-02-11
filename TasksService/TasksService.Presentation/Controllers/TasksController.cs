@@ -46,7 +46,7 @@ public class TasksController(
         return NoContent();
     }
 
-    [HttpDelete("deleteTask/{id}")]
+    [HttpDelete("deleteTask/{taskId}")]
     public async Task<IActionResult> DeleteTask(Guid taskId, CancellationToken cancellationToken)
     {
         var command = new DeleteTaskCommand { TaskId = taskId };

@@ -21,9 +21,14 @@ public class TasksMappingProfile : Profile
             .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.TaskDto.Category))
             .ForMember(dest => dest.Priority, opt => opt.MapFrom(src => src.TaskDto.Priority))
             .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.TaskDto.Deadline))
-            .ForMember(dest => dest.TaskTags, opt => opt.MapFrom(src => src.TaskDto.TaskTags))
+            .ForMember(dest => dest.TaskTags, opt => opt.MapFrom(src => 
+                src.TaskDto.TaskTags.Select(tagDto => new Tag 
+                { 
+                    Id = tagDto.Id != Guid.Empty ? tagDto.Id : Guid.NewGuid(),
+                    Name = tagDto.TagName 
+                }).ToList()))
             .ForMember(dest => dest.TaskComments, opt => opt.MapFrom(src => src.TaskDto.TaskComments));
-        
+
         CreateMap<UpdateTaskCommand, CustomTask>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.TaskDto.Id))
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
