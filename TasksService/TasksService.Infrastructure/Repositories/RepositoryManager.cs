@@ -2,25 +2,30 @@
 
 namespace TasksService.Infrastructure.Repositories;
 
-public class RepositoryManager : IRepositoryManager
+public class RepositoryManager(ApplicationContext repositoryContext) : IRepositoryManager
 {
-    private ApplicationContext _repositoryContext;
     private ITasksRepository _taskRepository;
+    private ITagsRepository _tagRepository;
 
-    public RepositoryManager(ApplicationContext repositoryContext)
-    {
-        _repositoryContext = repositoryContext;
-    }
-    
     public ITasksRepository Task
     {
         get
         {
             if(_taskRepository == null)
-                _taskRepository = new TasksRepository(_repositoryContext);
+                _taskRepository = new TasksRepository(repositoryContext);
             return _taskRepository;
         }
     }
     
-    public Task SaveAsync() => _repositoryContext.SaveChangesAsync();
+    public ITagsRepository Tag
+    {
+        get
+        {
+            if(_tagRepository == null)
+                _tagRepository = new TagsRepository(repositoryContext);
+            return _tagRepository;
+        }
+    }
+    
+    public Task SaveAsync() => repositoryContext.SaveChangesAsync();
 }

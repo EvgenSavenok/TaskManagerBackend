@@ -3,7 +3,7 @@ using TasksService.Domain.Models.Enums;
 
 namespace Application.DataTransferObjects.TasksDto;
 
-public record TaskDto()
+public record TaskDto
 {
     public Guid Id { get; set; }
     

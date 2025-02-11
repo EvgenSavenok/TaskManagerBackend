@@ -16,6 +16,7 @@ public class UpdateTaskCommandHandler(
     public async Task<Unit> Handle(UpdateTaskCommand request, CancellationToken cancellationToken)
     {
         var taskId = request.TaskDto.Id;
+        
         var taskEntity = await repository.Task.GetTaskByIdAsync(taskId, trackChanges: true, cancellationToken);
         if (taskEntity == null)
         {

@@ -14,28 +14,28 @@ namespace TasksService.Presentation.Controllers;
 public class TasksController(
     IMediator mediator) : Controller
 {
-    [HttpPost("addTask")]
-    public async Task<IActionResult> CreateTask([FromBody]TaskDto taskDto)
-    {
-        var command = new CreateTaskCommand { TaskDto = taskDto };
-        await mediator.Send(command);
-        return Ok();
-    }
-
-    [HttpGet("getAllTasks")]
-    public async Task<IActionResult> GetAllTasks()
-    {
-        var query = new GetAllTasksQuery { };
-        var tasks = await mediator.Send(query);
-        return Ok(tasks);
-    }
-    
     [HttpGet("getTaskById/{id}")]
     public async Task<IActionResult> GetTask(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetTaskByIdQuery(id) { TaskId = id };
         var task = await mediator.Send(query, cancellationToken);
         return Ok(task);
+    }
+    
+    [HttpGet("getAllTasks")]
+    public async Task<IActionResult> GetAllTasks()
+    {
+        var query = new GetAllTasksQuery();
+        var tasks = await mediator.Send(query);
+        return Ok(tasks);
+    }
+    
+    [HttpPost("addTask")]
+    public async Task<IActionResult> CreateTask([FromBody]TaskDto taskDto)
+    {
+        var command = new CreateTaskCommand { TaskDto = taskDto };
+        await mediator.Send(command);
+        return NoContent();
     }
 
     [HttpPut("updateTask")]
@@ -47,9 +47,9 @@ public class TasksController(
     }
 
     [HttpDelete("deleteTask/{id}")]
-    public async Task<IActionResult> DeleteTask(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteTask(Guid taskId, CancellationToken cancellationToken)
     {
-        var command = new DeleteTaskCommand() { TaskId = id };
+        var command = new DeleteTaskCommand { TaskId = taskId };
         await mediator.Send(command, cancellationToken);
         return NoContent();
     }

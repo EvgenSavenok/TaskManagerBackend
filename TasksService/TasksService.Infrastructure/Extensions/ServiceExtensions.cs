@@ -53,5 +53,6 @@ public static class ServiceExtensions
     public static void AddValidators(this IServiceCollection services)
     {
         services.AddValidatorsFromAssemblyContaining<TaskValidator>();
+        services.AddValidatorsFromAssemblyContaining<TagValidator>();
     }
 }

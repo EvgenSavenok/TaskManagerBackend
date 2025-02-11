@@ -3,4 +3,5 @@
 public interface IRepositoryManager
 {
     ITasksRepository Task { get; }
+    ITagsRepository Tag { get; }
 }
