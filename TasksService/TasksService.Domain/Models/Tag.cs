@@ -6,5 +6,5 @@ public class Tag
     
     public string Name { get; set; }
 
-    public virtual ICollection<CustomTask> TaskTags { get; set; } = new List<CustomTask>();
+    public ICollection<CustomTask> TaskTags { get; set; } = new List<CustomTask>();
 }

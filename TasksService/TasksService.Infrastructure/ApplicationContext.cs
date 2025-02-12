@@ -14,8 +14,16 @@ public class ApplicationContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
-        modelBuilder.ApplyConfiguration(new TaskConfiguration());
+    
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
+
+        modelBuilder.Entity<CustomTask>()
+            .HasMany(t => t.TaskTags)  
+            .WithMany(t => t.TaskTags) 
+            .UsingEntity<Dictionary<string, object>>(
+                "CustomTaskTag",
+                j => j.HasOne<Tag>().WithMany().HasForeignKey("TagId"),
+                j => j.HasOne<CustomTask>().WithMany().HasForeignKey("TaskId"));
     }
     
     public DbSet<CustomTask> Tasks { get; set; }

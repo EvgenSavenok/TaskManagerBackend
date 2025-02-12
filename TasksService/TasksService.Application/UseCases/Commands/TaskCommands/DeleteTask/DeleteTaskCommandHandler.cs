@@ -10,6 +10,7 @@ public class DeleteTaskCommandHandler (IRepositoryManager repository)
     public async Task<Unit> Handle(DeleteTaskCommand request, CancellationToken cancellationToken)
     {
         var taskId = request.TaskId;
+        
         var taskEntity = await repository.Task.GetTaskByIdAsync(taskId, trackChanges: true, cancellationToken);
         if (taskEntity == null)
         {

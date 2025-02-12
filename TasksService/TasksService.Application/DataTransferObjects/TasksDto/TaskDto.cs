@@ -1,9 +1,11 @@
-﻿using TasksService.Domain.Models;
+﻿using Application.DataTransferObjects.CommentsDto;
+using Application.DataTransferObjects.TagsDto;
+using TasksService.Domain.Models;
 using TasksService.Domain.Models.Enums;
 
 namespace Application.DataTransferObjects.TasksDto;
 
-public record TaskDto()
+public record TaskDto
 {
     public Guid Id { get; set; }
     
@@ -14,6 +16,6 @@ public record TaskDto()
     public DateTime Deadline { get; set; }
     public DateTime CreatedAt { get; set; }
     
-    public ICollection<Tag> TaskTags { get; set; } = new List<Tag>();
-    public ICollection<Comment> TaskComments { get; set; } = new List<Comment>();
+    public List<TagDto> TaskTags { get; set; } = new();
+    public List<CommentDto> TaskComments { get; set; } = new ();
 }

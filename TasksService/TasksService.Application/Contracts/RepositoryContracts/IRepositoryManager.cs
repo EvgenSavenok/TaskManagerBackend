@@ -3,4 +3,6 @@
 public interface IRepositoryManager
 {
     ITasksRepository Task { get; }
+    ITagsRepository Tag { get; }
+    ICommentsRepository Comment { get; }
 }

@@ -16,22 +16,36 @@ public class UpdateTaskCommandHandler(
     public async Task<Unit> Handle(UpdateTaskCommand request, CancellationToken cancellationToken)
     {
         var taskId = request.TaskDto.Id;
-        var taskEntity = await repository.Task.GetTaskByIdAsync(taskId, trackChanges: true, cancellationToken);
+    
+        var taskEntity = await repository.Task.GetTaskByIdAsync(
+            taskId, 
+            trackChanges: true, 
+            cancellationToken);
         if (taskEntity == null)
         {
             throw new NotFoundException($"Task with id {taskId} not found.");
         }
-        
+    
         mapper.Map(request.TaskDto, taskEntity);
-        
+    
         var validationResult = await validator.ValidateAsync(taskEntity, cancellationToken);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
         }
-
-        await repository.Task.Update(taskEntity, cancellationToken);
         
+        var tagNamesInRequest = request.TaskDto.TaskTags.Select(tag => tag.TagName).ToList();
+        
+        var tagsToAdd = (await repository.Tag.FindByCondition(
+                 tag => tagNamesInRequest.Contains(tag.Name), 
+                 trackChanges: true, 
+                 cancellationToken))
+             .ToList();
+
+        taskEntity.TaskTags = tagsToAdd;
+        
+        await repository.Task.Update(taskEntity, cancellationToken);
+    
         return Unit.Value;
     }
 }

@@ -1,4 +1,5 @@
-﻿using TasksService.Domain.Models.Enums;
+﻿using System.Text.Json.Serialization;
+using TasksService.Domain.Models.Enums;
 
 namespace TasksService.Domain.Models;
 
@@ -13,6 +14,8 @@ public class CustomTask
     public DateTime Deadline { get; set; }
     public DateTime CreatedAt { get; set; }
     
+    [JsonIgnore]
     public ICollection<Tag> TaskTags { get; set; } = new List<Tag>();
+    [JsonIgnore]
     public ICollection<Comment> TaskComments { get; set; } = new List<Comment>();
 }
