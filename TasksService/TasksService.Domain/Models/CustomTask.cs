@@ -16,5 +16,6 @@ public class CustomTask
     
     [JsonIgnore]
     public ICollection<Tag> TaskTags { get; set; } = new List<Tag>();
+    [JsonIgnore]
     public ICollection<Comment> TaskComments { get; set; } = new List<Comment>();
 }

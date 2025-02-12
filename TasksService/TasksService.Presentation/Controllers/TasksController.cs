@@ -39,9 +39,14 @@ public class TasksController(
     }
 
     [HttpPut("updateTask")]
-    public async Task<IActionResult> UpdateTask([FromBody] TaskDto taskDto, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateTask(
+        [FromBody] TaskDto taskDto, 
+        CancellationToken cancellationToken)
     {
-        var command = new UpdateTaskCommand { TaskDto = taskDto };
+        var command = new UpdateTaskCommand
+        {
+            TaskDto = taskDto
+        };
         await mediator.Send(command, cancellationToken);
         return NoContent();
     }

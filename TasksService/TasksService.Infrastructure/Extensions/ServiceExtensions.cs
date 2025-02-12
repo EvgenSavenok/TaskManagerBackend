@@ -54,5 +54,6 @@ public static class ServiceExtensions
     {
         services.AddValidatorsFromAssemblyContaining<TaskValidator>();
         services.AddValidatorsFromAssemblyContaining<TagValidator>();
+        services.AddValidatorsFromAssemblyContaining<CommentValidator>();
     }
 }

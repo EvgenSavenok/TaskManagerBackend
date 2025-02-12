@@ -1,6 +1,5 @@
 ﻿using Application.Contracts.RepositoryContracts;
-using Application.DataTransferObjects.TasksDto;
-using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TasksService.Domain.Models;
 
 namespace TasksService.Infrastructure.Repositories;
@@ -10,11 +9,29 @@ public class TasksRepository(ApplicationContext repositoryContext)
 {
     public async Task<CustomTask?> GetTaskByIdAsync(Guid taskId, bool trackChanges, CancellationToken cancellationToken)
     {
-        var taskWithTags = await FindByCondition(
+        var tasks = await FindByCondition(
             t => t.Id == taskId, 
             trackChanges: false, 
             cancellationToken, 
-            t => t.TaskTags);
-        return taskWithTags.FirstOrDefault();
+            t => t.TaskTags,
+            t => t.TaskComments);
+        return tasks.FirstOrDefault();
     }
+    
+    public override async Task<IEnumerable<CustomTask>> FindAll(bool trackChanges, CancellationToken cancellationToken)
+    {
+        var query = repositoryContext.Tasks.AsQueryable();
+
+        if (!trackChanges)
+        {
+            query = query.AsNoTracking();
+        }
+
+        query = query
+            .Include(t => t.TaskTags)    
+            .Include(t => t.TaskComments); 
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
 }

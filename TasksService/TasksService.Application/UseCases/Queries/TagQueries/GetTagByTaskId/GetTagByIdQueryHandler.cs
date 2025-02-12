@@ -6,16 +6,15 @@ using TasksService.Domain.CustomExceptions;
 
 namespace Application.UseCases.Queries.TagQueries.GetTagByTaskId;
 
-public class GetTagByTaskIdQueryHandler(
+public class GetTagByIdQueryHandler(
     IRepositoryManager repository,
     IMapper mapper)
-    : IRequestHandler<GetTagByTaskIdQuery, TagDto>
+    : IRequestHandler<GetTagByIdQuery, TagDto>
 {
-    public async Task<TagDto> Handle(GetTagByTaskIdQuery request, CancellationToken cancellationToken)
+    public async Task<TagDto> Handle(GetTagByIdQuery request, CancellationToken cancellationToken)
     {
-        Guid taskId = request.TaskId;
         Guid tagId = request.TagId;
-        var tag = await repository.Tag.GetTagByTaskId(taskId, tagId, trackChanges: false, cancellationToken);
+        var tag = await repository.Tag.GetTagById(tagId, trackChanges: false, cancellationToken);
         if (tag == null)
         {
             throw new NotFoundException($"Tag with id {tagId} not found.");

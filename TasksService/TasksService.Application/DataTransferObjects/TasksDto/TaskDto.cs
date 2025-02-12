@@ -1,4 +1,5 @@
-﻿using Application.DataTransferObjects.TagsDto;
+﻿using Application.DataTransferObjects.CommentsDto;
+using Application.DataTransferObjects.TagsDto;
 using TasksService.Domain.Models;
 using TasksService.Domain.Models.Enums;
 
@@ -16,5 +17,5 @@ public record TaskDto
     public DateTime CreatedAt { get; set; }
     
     public List<TagDto> TaskTags { get; set; } = new();
-    public ICollection<Comment> TaskComments { get; set; } = new List<Comment>();
+    public List<CommentDto> TaskComments { get; set; } = new ();
 }

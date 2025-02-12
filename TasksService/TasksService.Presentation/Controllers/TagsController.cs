@@ -14,25 +14,23 @@ namespace TasksService.Presentation.Controllers;
 public class TagsController(
     IMediator mediator) : Controller
 {
-    [HttpGet("{taskId}/getTag/{tagId}")]
-    public async Task<IActionResult> GetTagByTaskId(
-        Guid taskId,
+    [HttpGet("getTag/{tagId}")]
+    public async Task<IActionResult> GetTagById(
         Guid tagId,
         CancellationToken cancellationToken)
     {
-        var query = new GetTagByTaskIdQuery(taskId)
+        var query = new GetTagByIdQuery
         {
-            TaskId = taskId,
             TagId = tagId
         };
         var tag = await mediator.Send(query, cancellationToken);
         return Ok(tag);
     }
     
-    [HttpGet("{taskId}/getAllTags")]
-    public async Task<IActionResult> GetAllTags(Guid taskId, CancellationToken cancellationToken)
+    [HttpGet("{taskId}/getAllTagsOfTask")]
+    public async Task<IActionResult> GetAllTagsOfTask(Guid taskId, CancellationToken cancellationToken)
     {
-        var query = new GetAllTagsQuery()
+        var query = new GetAllTagsQuery
         {
             TaskId = taskId,
         };
@@ -40,31 +38,27 @@ public class TagsController(
         return Ok(tags);
     }
     
-    [HttpPost("{taskId}/addTag")]
-    public async Task<IActionResult> AddTagToTask(
+    [HttpPost("addTag")]
+    public async Task<IActionResult> AddTag(
         [FromBody]TagDto tagDto, 
-        Guid taskId, 
         CancellationToken cancellationToken)
     {
         var command = new CreateTagCommand
         {
-            TaskId = taskId,
             TagName = tagDto.TagName
         };
         await mediator.Send(command, cancellationToken);
         return NoContent();
     }
     
-    [HttpPut("{taskId}/updateTag/{tagId}")]
+    [HttpPut("updateTag/{tagId}")]
     public async Task<IActionResult> UpdateTag(
         [FromBody]TagDto tagDto, 
-        Guid taskId,
         Guid tagId,
         CancellationToken cancellationToken)
     {
         var command = new UpdateTagCommand
         {
-            TaskId = taskId,
             TagId = tagId,
             TagName = tagDto.TagName
         };
@@ -72,15 +66,13 @@ public class TagsController(
         return NoContent();
     }
     
-    [HttpDelete("{taskId}/deleteTag/{tagId}")]
+    [HttpDelete("deleteTag/{tagId}")]
     public async Task<IActionResult> DeleteTag(
-        Guid taskId, 
         Guid tagId,
         CancellationToken cancellationToken)
     {
         var command = new DeleteTagCommand
         {
-            TaskId = taskId,
             TagId = tagId
         };
         await mediator.Send(command, cancellationToken);

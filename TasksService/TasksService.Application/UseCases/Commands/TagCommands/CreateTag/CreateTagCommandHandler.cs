@@ -23,15 +23,7 @@ public class CreateTagCommandHandler(
             throw new ValidationException(validationResult.Errors);
         }
         
-        Guid taskId = request.TaskId;
-        var task = await repository.Task.GetTaskByIdAsync(taskId, trackChanges: false, cancellationToken);
-        if (task == null)
-        {
-            throw new NotFoundException($"Task with id {taskId} not found.");
-        }
-        
         var tag = await repository.Tag.GetTagByName(
-            taskId, 
             tagEntity.Name,
             trackChanges: false, 
             cancellationToken);
@@ -43,9 +35,6 @@ public class CreateTagCommandHandler(
 
         await repository.Tag.Create(tagEntity, cancellationToken);
 
-        task.TaskTags.Add(tagEntity);
-        await repository.Task.Update(task, cancellationToken);
-        
         return Unit.Value;
     }
 }

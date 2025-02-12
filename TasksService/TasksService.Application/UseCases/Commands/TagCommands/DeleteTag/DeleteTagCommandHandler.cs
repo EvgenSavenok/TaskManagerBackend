@@ -10,10 +10,8 @@ public class DeleteTagCommandHandler(IRepositoryManager repository)
     public async Task<Unit> Handle(DeleteTagCommand request, CancellationToken cancellationToken)
     {
         var tagId = request.TagId;
-        var taskId = request.TaskId;
         
-        var tagEntity = await repository.Tag.GetTagByTaskId(
-            taskId, 
+        var tagEntity = await repository.Tag.GetTagById(
             tagId, 
             trackChanges: true, 
             cancellationToken);

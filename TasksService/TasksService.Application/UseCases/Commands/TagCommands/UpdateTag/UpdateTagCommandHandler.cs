@@ -15,11 +15,9 @@ public class UpdateTagCommandHandler(
 {
     public async Task<Unit> Handle(UpdateTagCommand request, CancellationToken cancellationToken)
     {
-        var taskId = request.TaskId;
         var tagId = request.TagId;
         
-        var tagEntity = await repository.Tag.GetTagByTaskId(
-            taskId, 
+        var tagEntity = await repository.Tag.GetTagById(
             tagId, 
             trackChanges: true, 
             cancellationToken);

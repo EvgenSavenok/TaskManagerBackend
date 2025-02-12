@@ -15,7 +15,7 @@ public class ApplicationContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
     
-        modelBuilder.ApplyConfiguration(new TaskConfiguration());
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
 
         modelBuilder.Entity<CustomTask>()
             .HasMany(t => t.TaskTags)  

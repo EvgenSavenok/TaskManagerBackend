@@ -6,6 +6,7 @@ public class RepositoryManager(ApplicationContext repositoryContext) : IReposito
 {
     private ITasksRepository _taskRepository;
     private ITagsRepository _tagRepository;
+    private ICommentsRepository _commentRepository;
 
     public ITasksRepository Task
     {
@@ -27,5 +28,13 @@ public class RepositoryManager(ApplicationContext repositoryContext) : IReposito
         }
     }
     
-    public Task SaveAsync() => repositoryContext.SaveChangesAsync();
+    public ICommentsRepository Comment
+    {
+        get
+        {
+            if(_commentRepository == null)
+                _commentRepository = new CommentsRepository(repositoryContext);
+            return _commentRepository;
+        }
+    }
 }
