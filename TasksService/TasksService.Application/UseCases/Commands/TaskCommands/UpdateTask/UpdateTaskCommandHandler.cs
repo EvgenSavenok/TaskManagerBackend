@@ -17,7 +17,10 @@ public class UpdateTaskCommandHandler(
     {
         var taskId = request.TaskDto.Id;
     
-        var taskEntity = await repository.Task.GetTaskByIdAsync(taskId, trackChanges: true, cancellationToken);
+        var taskEntity = await repository.Task.GetTaskByIdAsync(
+            taskId, 
+            trackChanges: true, 
+            cancellationToken);
         if (taskEntity == null)
         {
             throw new NotFoundException($"Task with id {taskId} not found.");
@@ -35,14 +38,9 @@ public class UpdateTaskCommandHandler(
         
         var tagsToAdd = (await repository.Tag.FindByCondition(
                  tag => tagNamesInRequest.Contains(tag.Name), 
-                 trackChanges: false, 
+                 trackChanges: true, 
                  cancellationToken))
              .ToList();
-        
-        foreach (var tag in tagsToAdd)
-        {
-            repository.Tag.Attach(tag);
-        }
 
         taskEntity.TaskTags = tagsToAdd;
         

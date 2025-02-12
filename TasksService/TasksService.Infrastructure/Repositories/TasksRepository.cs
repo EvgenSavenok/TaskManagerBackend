@@ -11,7 +11,7 @@ public class TasksRepository(ApplicationContext repositoryContext)
     {
         var tasks = await FindByCondition(
             t => t.Id == taskId, 
-            trackChanges: false, 
+            trackChanges, 
             cancellationToken, 
             t => t.TaskTags,
             t => t.TaskComments);

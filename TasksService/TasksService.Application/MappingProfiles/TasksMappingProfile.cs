@@ -13,6 +13,18 @@ public class TasksMappingProfile : Profile
     {
         CreateMap<TaskDto, CustomTask>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.TaskTags, opt => opt.MapFrom(src =>
+                src.TaskTags.Select(tagDto => new Tag
+                {
+                    Id = tagDto.Id,
+                    Name = tagDto.TagName
+                }).ToList()))
+            .ForMember(dest => dest.TaskComments, opt => opt.MapFrom(src =>
+                src.TaskComments.Select(commentDto => new Comment
+                {
+                    Id = commentDto.Id,
+                    Content = commentDto.Content
+                }).ToList()))
             .ReverseMap();
         
         CreateMap<CreateTaskCommand, CustomTask>()
@@ -34,6 +46,7 @@ public class TasksMappingProfile : Profile
                 {
                     Id = commentDto.Id,
                     Content = commentDto.Content, 
+                    CreatedAt = DateTime.UtcNow 
                 }).ToList()));
         
         CreateMap<UpdateTaskCommand, CustomTask>()
