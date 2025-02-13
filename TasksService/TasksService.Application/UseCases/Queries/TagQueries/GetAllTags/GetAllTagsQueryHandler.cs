@@ -21,5 +21,4 @@ public class GetAllTagsQueryHandler(
 
         return mapper.Map<IEnumerable<TagDto>>(tags);
     }
-
 }

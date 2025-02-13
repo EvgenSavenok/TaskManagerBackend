@@ -13,6 +13,4 @@ public interface ITagsRepository : IRepositoryBase<Tag>
         string tagName, 
         bool trackChanges, 
         CancellationToken cancellationToken);
-    
-    void Attach<T>(T entity) where T : class;
 }

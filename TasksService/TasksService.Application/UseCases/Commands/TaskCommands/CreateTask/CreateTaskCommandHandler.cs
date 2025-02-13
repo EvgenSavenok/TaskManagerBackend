@@ -25,14 +25,9 @@ public class CreateTaskCommandHandler(
         var tagNames = taskEntity.TaskTags.Select(tag => tag.Name).ToList();
         var existingTags = (await repository.Tag.FindByCondition(
                 tag => tagNames.Contains(tag.Name), 
-                trackChanges: false, 
+                trackChanges: true, 
                 cancellationToken))
             .ToList();
-        
-        foreach (var tag in existingTags)
-        {
-            repository.Tag.Attach(tag);
-        }
         
         taskEntity.TaskTags = existingTags;
         await repository.Task.Create(taskEntity, cancellationToken);
