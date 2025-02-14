@@ -22,7 +22,7 @@ public class TasksMappingProfile : Profile
             .ForMember(dest => dest.TaskComments, opt => opt.MapFrom(src =>
                 src.TaskComments.Select(commentDto => new Comment
                 {
-                    Id = commentDto.Id,
+                    Id = commentDto.CommentId,
                     Content = commentDto.Content
                 }).ToList()))
             .ReverseMap();
@@ -44,7 +44,7 @@ public class TasksMappingProfile : Profile
             .ForMember(dest => dest.TaskComments, opt => opt.MapFrom(src =>
                 src.TaskDto.TaskComments.Select(commentDto => new Comment
                 {
-                    Id = commentDto.Id,
+                    Id = commentDto.CommentId,
                     Content = commentDto.Content, 
                     CreatedAt = DateTime.UtcNow 
                 }).ToList()));

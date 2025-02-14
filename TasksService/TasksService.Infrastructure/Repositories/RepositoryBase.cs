@@ -38,7 +38,7 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
                 query = query.Include(include);
             }
         }
-
+        
         return await query.ToListAsync(cancellationToken);
     }
 

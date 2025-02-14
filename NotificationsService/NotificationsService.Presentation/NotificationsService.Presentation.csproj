@@ -6,4 +6,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\NotificationsService.Application\NotificationsService.Application.csproj" />
+      <ProjectReference Include="..\NotificationsService.Infrastructure\NotificationsService.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>

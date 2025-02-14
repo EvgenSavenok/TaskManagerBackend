@@ -33,5 +33,4 @@ public class TasksRepository(ApplicationContext repositoryContext)
 
         return await query.ToListAsync(cancellationToken);
     }
-
 }
