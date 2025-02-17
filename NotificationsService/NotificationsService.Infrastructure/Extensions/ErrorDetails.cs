@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace TasksService.Infrastructure.Extensions;
+namespace NotificationsService.Infrastructure.Extensions;
 
 public class ErrorDetails
 {

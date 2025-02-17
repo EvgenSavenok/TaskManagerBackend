@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using TasksService.Domain.CustomExceptions;
+using NotificationsService.Domain.CustomExceptions;
 
-namespace TasksService.Infrastructure.Extensions;
+namespace NotificationsService.Infrastructure.Extensions;
 
 public static class ExceptionMiddlewareExtensions
 {

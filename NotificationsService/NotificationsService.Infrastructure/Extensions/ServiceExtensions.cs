@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using NotificationsService.Application.Contracts.RepositoryContracts;
+using NotificationsService.Application.Validation;
 using NotificationsService.Infrastructure.Repositories;
 
 namespace NotificationsService.Infrastructure.Extensions;
@@ -24,4 +26,9 @@ public static class ServiceExtensions
     
     public static void ConfigureRepositoryManager(this IServiceCollection services) =>
         services.AddScoped<IRepositoryManager, RepositoryManager>();
+    
+    public static void AddValidators(this IServiceCollection services)
+    {
+        services.AddValidatorsFromAssemblyContaining<NotificationValidator>();
+    }
 }
