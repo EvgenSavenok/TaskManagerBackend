@@ -1,4 +1,4 @@
-﻿namespace TasksService.Domain.Models.Enums;
+﻿namespace TasksService.Domain.Enums;
 
 public enum Category
 {

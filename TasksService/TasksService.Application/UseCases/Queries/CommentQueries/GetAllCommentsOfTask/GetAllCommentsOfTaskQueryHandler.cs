@@ -23,5 +23,4 @@ public class GetAllCommentsOfTaskQueryHandler(
 
         return mapper.Map<IEnumerable<CommentDto>>(comments);
     }
-
 }

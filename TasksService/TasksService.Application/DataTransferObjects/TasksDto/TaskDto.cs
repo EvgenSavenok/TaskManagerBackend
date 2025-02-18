@@ -1,7 +1,7 @@
 ﻿using Application.DataTransferObjects.CommentsDto;
 using Application.DataTransferObjects.TagsDto;
+using TasksService.Domain.Enums;
 using TasksService.Domain.Models;
-using TasksService.Domain.Models.Enums;
 
 namespace Application.DataTransferObjects.TasksDto;
 

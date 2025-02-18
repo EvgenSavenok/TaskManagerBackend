@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMongoDb(builder.Configuration);
 builder.Services.ConfigureRepositoryManager();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddValidators();
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorPages();
@@ -15,6 +16,8 @@ builder.Services.AddEndpointsApiExplorer();
 var app = builder.Build();
 
 app.UseRouting();
+
+app.ConfigureExceptionHandler();
 
 app.MapControllers();
 app.MapRazorPages();

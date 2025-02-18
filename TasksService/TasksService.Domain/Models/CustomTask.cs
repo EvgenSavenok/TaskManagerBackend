@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using TasksService.Domain.Models.Enums;
+using TasksService.Domain.Enums;
 
 namespace TasksService.Domain.Models;
 
