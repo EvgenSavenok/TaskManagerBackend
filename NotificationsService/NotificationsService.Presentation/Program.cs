@@ -1,3 +1,4 @@
+using Hangfire;
 using MediatR;
 using NotificationsService.Infrastructure.Extensions;
 
@@ -12,8 +13,12 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.ConfigureEmailService();
+builder.Services.ConfigureHangfire(builder.Configuration);
 
 var app = builder.Build();
+
+app.UseHangfireDashboard();
 
 app.UseRouting();
 
