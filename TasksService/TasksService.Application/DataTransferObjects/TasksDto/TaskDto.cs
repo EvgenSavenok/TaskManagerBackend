@@ -14,7 +14,6 @@ public record TaskDto
     public Category Category { get; set; }
     public Priority Priority { get; set; }
     public DateTime Deadline { get; set; }
-    public DateTime CreatedAt { get; set; }
     
     public List<TagDto> TaskTags { get; set; } = new();
     public List<CommentDto> TaskComments { get; set; } = new ();

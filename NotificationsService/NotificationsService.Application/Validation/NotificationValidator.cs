@@ -11,9 +11,6 @@ public class NotificationValidator : AbstractValidator<Notification>
             .NotEmpty().WithMessage("Title is required.")
             .MaximumLength(100).WithMessage("Title must be at most 100 characters long.");
         
-        RuleFor(notification => notification.Status)
-            .NotEmpty().WithMessage("Status is required.");
-        
         RuleFor(notification => notification.MinutesBeforeDeadline)
             .NotEmpty().WithMessage("MinutesBeforeDeadline is required.")
             .GreaterThanOrEqualTo(0).WithMessage("MinutesBeforeDeadline must be non-negative.");

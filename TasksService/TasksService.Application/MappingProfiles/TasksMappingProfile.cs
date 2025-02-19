@@ -3,6 +3,7 @@ using Application.DataTransferObjects.TasksDto;
 using Application.UseCases.Commands.TaskCommands.CreateTask;
 using Application.UseCases.Commands.TaskCommands.UpdateTask;
 using AutoMapper;
+using Microsoft.AspNetCore.SignalR;
 using TasksService.Domain.Models;
 
 namespace Application.MappingProfiles;
@@ -35,6 +36,7 @@ public class TasksMappingProfile : Profile
             .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.TaskDto.Category))
             .ForMember(dest => dest.Priority, opt => opt.MapFrom(src => src.TaskDto.Priority))
             .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.TaskDto.Deadline))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(_ => 1))
             .ForMember(dest => dest.TaskTags, opt => opt.MapFrom(src =>
                 src.TaskDto.TaskTags.Select(tagDto => new Tag
                 {

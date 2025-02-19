@@ -17,7 +17,7 @@ public class HangfireService(
     {
         DateTime nowUtc = DateTime.UtcNow; 
         TimeSpan delay = notification.ReminderTime - nowUtc;
-        
+
         var jobId = notification.HangfireJobId = BackgroundJob.Schedule(
             () => SendNotificationEmail(notification.Id, cancellationToken), delay);
         return jobId;
@@ -51,7 +51,9 @@ public class HangfireService(
             "Напоминание о задаче", 
             emailBody);
         
-        await repositoryManager.Notification.Delete(n => n.Id == notificationId, cancellationToken);
+        await repositoryManager.Notification.Delete(
+            n => n.Id == notificationId, 
+            cancellationToken);
     }
 
     public void DeleteNotificationInHangfire(string hangfireJobId)

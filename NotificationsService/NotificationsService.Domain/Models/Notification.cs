@@ -1,6 +1,5 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using NotificationsService.Domain.Enums;
 
 namespace NotificationsService.Domain.Models;
 
@@ -19,8 +18,6 @@ public class Notification
     
     public string Title { get; set; } 
     
-    public Status Status { get; set; } 
-
     public DateTime CreatedAt { get; set; } 
     
     [BsonDateTimeOptions(Kind = DateTimeKind.Utc)] 

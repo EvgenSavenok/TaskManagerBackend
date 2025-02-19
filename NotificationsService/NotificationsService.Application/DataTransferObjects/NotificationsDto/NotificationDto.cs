@@ -1,6 +1,4 @@
-﻿using NotificationsService.Domain.Enums;
-
-namespace NotificationsService.Application.DataTransferObjects.NotificationsDto;
+﻿namespace NotificationsService.Application.DataTransferObjects.NotificationsDto;
 
 public record NotificationDto
 {
@@ -13,8 +11,6 @@ public record NotificationDto
     
     public string Title { get; set; } 
     
-    public Status Status { get; set; } 
-
     public DateTime CreatedAt { get; set; } 
     
     public DateTime Deadline { get; set; }
