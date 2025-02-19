@@ -42,7 +42,9 @@ public class NotificationController(
         {
             NotificationDto = notificationDto
         };
+        
         await mediator.Send(command, cancellationToken);
+        
         return NoContent();
     }
 

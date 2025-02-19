@@ -1,3 +1,3 @@
 ﻿namespace TasksService.Domain.CustomExceptions;
 
-public class NotFoundException(string message) : ApplicationException(message);
+public class NotFoundException(string message) : Exception(message);
