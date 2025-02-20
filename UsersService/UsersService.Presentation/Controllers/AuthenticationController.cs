@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using UsersService.Application.DataTransferObjects;
+using UsersService.Application.UseCases.Commands.UserCommands.Authenticate;
 using UsersService.Application.UseCases.Commands.UserCommands.Register;
 
 namespace UsersService.Presentation.Controllers;
@@ -20,5 +21,17 @@ public class AuthenticationController(IMediator mediator) : Controller
         await mediator.Send(command);
         
         return Ok();
+    }
+    
+    [HttpPost("login")]
+    public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto userForLogin)
+    {
+        var command = new AuthenticateUserCommand
+        {
+            UserForAuthenticationDto = userForLogin
+        };
+        var (accessToken, refreshToken) = await mediator.Send(command);
+         
+        return Ok(new { AccessToken = accessToken, RefreshToken = refreshToken });
     }
 }
