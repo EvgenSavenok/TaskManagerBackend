@@ -1,6 +1,19 @@
+using ApiGateway;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddPolicies();
+builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+builder.Services.AddOcelot();
+
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.UseCors("UsersPolicy");
+app.UseCors("TasksPolicy");
+app.UseCors("NotificationsPolicy");
+
+app.UseOcelot().Wait();
 
 app.Run();

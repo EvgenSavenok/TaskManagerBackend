@@ -3,6 +3,7 @@ using Application.UseCases.Commands.TagCommands.CreateTag;
 using Application.UseCases.Commands.TagCommands.DeleteTag;
 using Application.UseCases.Commands.TagCommands.UpdateTag;
 using Application.UseCases.Queries.TagQueries.GetAllTags;
+using Application.UseCases.Queries.TagQueries.GetAllTagsOfTask;
 using Application.UseCases.Queries.TagQueries.GetTagByTaskId;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -30,10 +31,18 @@ public class TagsController(
     [HttpGet("{taskId}/getAllTagsOfTask")]
     public async Task<IActionResult> GetAllTagsOfTask(Guid taskId, CancellationToken cancellationToken)
     {
-        var query = new GetAllTagsQuery
+        var query = new GetAllTagsOfTaskQuery
         {
             TaskId = taskId,
         };
+        var taskTags = await mediator.Send(query, cancellationToken);
+        return Ok(taskTags);
+    }
+
+    [HttpGet("getAllTags")]
+    public async Task<IActionResult> GetAllTags(CancellationToken cancellationToken)
+    {
+        var query = new GetAllTagsQuery();
         var tags = await mediator.Send(query, cancellationToken);
         return Ok(tags);
     }

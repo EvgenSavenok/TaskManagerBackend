@@ -12,6 +12,7 @@ builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
+builder.Services.ConfigureSwagger();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureEmailService();
 builder.Services.ConfigureHangfire(builder.Configuration);
@@ -19,6 +20,12 @@ builder.Services.ConfigureHangfire(builder.Configuration);
 var app = builder.Build();
 
 app.UseHangfireDashboard();
+
+app.UseSwagger();
+app.UseSwaggerUI(s =>
+{
+    s.SwaggerEndpoint("/swagger/v1/swagger.json", "Task manager API");
+});
 
 app.UseRouting();
 

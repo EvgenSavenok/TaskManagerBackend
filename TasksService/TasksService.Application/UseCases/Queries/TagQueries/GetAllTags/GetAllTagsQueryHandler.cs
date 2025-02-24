@@ -2,6 +2,7 @@
 using Application.DataTransferObjects.TagsDto;
 using AutoMapper;
 using MediatR;
+using TasksService.Domain.Models;
 
 namespace Application.UseCases.Queries.TagQueries.GetAllTags;
 
@@ -12,13 +13,10 @@ public class GetAllTagsQueryHandler(
 {
     public async Task<IEnumerable<TagDto>> Handle(GetAllTagsQuery request, CancellationToken cancellationToken)
     {
-        var taskId = request.TaskId;
+        var tags = await repository.Tag.FindAll(trackChanges: false, cancellationToken: cancellationToken);
 
-        var tags = await repository.Tag.FindByCondition(
-            tag => tag.TaskTags.Any(task => task.Id == taskId), 
-            trackChanges: false, 
-            cancellationToken);
-
-        return mapper.Map<IEnumerable<TagDto>>(tags);
+        IEnumerable<TagDto> tagsDto = mapper.Map<IEnumerable<TagDto>>(tags);
+        
+        return tagsDto;
     }
 }

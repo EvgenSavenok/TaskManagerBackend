@@ -14,6 +14,7 @@
       <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.3.0" />
       <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
     </ItemGroup>
 
 </Project>

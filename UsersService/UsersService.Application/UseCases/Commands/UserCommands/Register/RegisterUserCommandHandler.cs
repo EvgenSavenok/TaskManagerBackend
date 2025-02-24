@@ -33,6 +33,10 @@ public class RegisterUserCommandHandler(IMapper mapper, UserManager<User> userMa
             var userRoleAsString = userDto.Role.ToString();
             await userManager.AddToRolesAsync(user, new List<string> { userRoleAsString });
         }
+        else
+        {
+            throw new BadRequestException($"Cannot create a new user, because {result}");
+        }
         
         return result;
     }

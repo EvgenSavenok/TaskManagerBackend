@@ -19,7 +19,7 @@ public class AuthenticateUserCommandHandler(
         var user = await userManager.FindByNameAsync(userForLogin.UserName);
         if (user == null || !await userManager.CheckPasswordAsync(user, userForLogin.Password))
         {
-            throw new UnauthorizedException("Cannot login");
+            throw new UnauthorizedException("Cannot find user");
         }
         await authManager.ValidateUser(userForLogin);
         var tokenDto = await authManager.CreateTokens(user, populateExp: true);

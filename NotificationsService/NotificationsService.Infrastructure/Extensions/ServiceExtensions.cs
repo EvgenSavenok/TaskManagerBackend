@@ -5,6 +5,7 @@ using Hangfire.Mongo.Migration.Strategies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 using NotificationsService.Application.Contracts.RepositoryContracts;
 using NotificationsService.Application.Contracts.ServicesContracts;
@@ -56,5 +57,14 @@ public static class ServiceExtensions
     {
         services.AddSingleton<ISmtpService, SmtpService>();
         services.AddScoped<IHangfireService, HangfireService>();
+    }
+    
+    public static void ConfigureSwagger(this IServiceCollection services)
+    {
+        services.AddSwaggerGen(s =>
+        {
+            s.SwaggerDoc("v1", new OpenApiInfo { Title = "Task manager API", Version = "v1"
+            });
+        });
     }
 }
