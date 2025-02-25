@@ -8,6 +8,8 @@ builder.Services.AddMongoDb(builder.Configuration);
 builder.Services.ConfigureRepositoryManager();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddValidators();
+builder.Services.AddAuthorizationPolicy();
+builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorPages();
@@ -28,6 +30,9 @@ app.UseSwaggerUI(s =>
 });
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.ConfigureExceptionHandler();
 
