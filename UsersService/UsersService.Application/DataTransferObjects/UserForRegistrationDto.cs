@@ -4,8 +4,8 @@ public class UserForRegistrationDto
 {
     public enum UserRole
     {
-        User,
-        Administrator
+        User = 1,
+        Administrator = 2
     }
     
     public string FirstName { get; set; }

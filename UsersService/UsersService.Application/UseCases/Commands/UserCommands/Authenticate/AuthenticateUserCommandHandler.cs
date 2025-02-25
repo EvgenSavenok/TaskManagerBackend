@@ -16,17 +16,21 @@ public class AuthenticateUserCommandHandler(
         CancellationToken cancellationToken)
     {
         var userForLogin = request.UserForAuthenticationDto;
+        
         var user = await userManager.FindByNameAsync(userForLogin.UserName);
         if (user == null || !await userManager.CheckPasswordAsync(user, userForLogin.Password))
         {
             throw new UnauthorizedException("Cannot find user");
         }
+        
         await authManager.ValidateUser(userForLogin);
+        
         var tokenDto = await authManager.CreateTokens(user, populateExp: true);
         if (tokenDto.AccessToken == null || tokenDto.RefreshToken == null)
         {
             throw new UnauthorizedException("Cannot create access or refresh token");
         }
+        
         return (tokenDto.AccessToken, tokenDto.RefreshToken);
     }
 }

@@ -17,4 +17,8 @@
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="UseCases\Commands\TokenCommands\" />
+    </ItemGroup>
+
 </Project>

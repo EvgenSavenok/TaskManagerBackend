@@ -1,15 +1,28 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UsersService.Application.DataTransferObjects;
 using UsersService.Application.UseCases.Commands.UserCommands.Authenticate;
+using UsersService.Application.UseCases.Commands.UserCommands.DeleteById;
 using UsersService.Application.UseCases.Commands.UserCommands.Register;
+using UsersService.Application.UseCases.Queries.UserQueries.GetAllUsers;
 
 namespace UsersService.Presentation.Controllers;
 
-[Route("api/authentication")]
+[Route("api/users")]
 [ApiController]
-public class AuthenticationController(IMediator mediator) : Controller
+public class UsersController(IMediator mediator) : Controller
 {
+    [HttpGet("getAllUsers")]
+    [Authorize(Policy = "Admin")]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var query = new GetAllUsersQuery();
+        var users = await mediator.Send(query);
+        
+        return Ok(users);
+    }
+    
     [HttpPost("register")]
     public async Task<IActionResult> RegisterUser(
         [FromBody] UserForRegistrationDto userForRegistration)
@@ -33,5 +46,18 @@ public class AuthenticationController(IMediator mediator) : Controller
         var (accessToken, refreshToken) = await mediator.Send(command);
          
         return Ok(new { AccessToken = accessToken, RefreshToken = refreshToken });
+    }
+
+    [HttpDelete("deleteUser/{userId}")]
+    [Authorize(Policy = "Admin")]
+    public async Task<IActionResult> DeleteUser(string userId)
+    {
+        var command = new DeleteUserCommand
+        {
+            UserId = userId
+        };
+        await mediator.Send(command);
+        
+        return Ok();
     }
 }

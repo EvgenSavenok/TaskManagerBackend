@@ -43,7 +43,7 @@ public static class ExceptionMiddlewareExtensions
                             break;
                         default:
                             statusCode = (int)HttpStatusCode.InternalServerError;
-                            message = "Internal Server Error.";
+                            message = exception.Message;
                             break;
                     }
 

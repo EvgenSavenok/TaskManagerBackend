@@ -103,7 +103,22 @@ public class AuthenticationManager(
         var randomNumber = new byte[32];
         using var rng = RandomNumberGenerator.Create();
         rng.GetBytes(randomNumber);
+        
         return Convert.ToBase64String(randomNumber);
+    }
+    
+    public async Task<string> CreateAccessToken(User user)
+    {
+        _user = user;
+        
+        var signingCredentials = GetSigningCredentials();
+        var claims = await GetClaims();
+        var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
+        
+        await userManager.UpdateAsync(_user);
+        var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        
+        return accessToken;
     }
     
     public async Task Logout(string userId)
