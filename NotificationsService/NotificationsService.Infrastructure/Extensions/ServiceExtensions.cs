@@ -12,6 +12,7 @@ using MongoDB.Driver;
 using NotificationsService.Application.Contracts.RepositoryContracts;
 using NotificationsService.Application.Contracts.ServicesContracts;
 using NotificationsService.Application.EmailService;
+using NotificationsService.Application.Messaging;
 using NotificationsService.Application.Validation;
 using NotificationsService.Infrastructure.Repositories;
 
@@ -97,5 +98,10 @@ public static class ServiceExtensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                 };
             });
+    }
+
+    public static void ConfigureRabbitMq(this IServiceCollection services)
+    {
+        services.AddHostedService<TaskCreatedConsumer>();
     }
 }

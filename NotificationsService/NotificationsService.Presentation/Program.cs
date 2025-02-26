@@ -18,6 +18,7 @@ builder.Services.ConfigureSwagger();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.ConfigureEmailService();
 builder.Services.ConfigureHangfire(builder.Configuration);
+builder.Services.ConfigureRabbitMq();
 
 var app = builder.Build();
 

@@ -1,0 +1,21 @@
+﻿namespace NotificationsService.Application.DataTransferObjects.TaskEventDto;
+
+public record TaskEventDto
+{
+    public Guid TaskId { get; set; }
+    
+    public Guid UserId { get; set; }
+    
+    
+    public string Title { get; set; } 
+    
+    public DateTime CreatedAt { get; set; } 
+    
+    public DateTime Deadline { get; set; }
+    
+    public int MinutesBeforeDeadline { get; set; }
+    
+    public string UserTimeZone { get; set; }
+    
+    public string UserEmail { get; set; }
+}

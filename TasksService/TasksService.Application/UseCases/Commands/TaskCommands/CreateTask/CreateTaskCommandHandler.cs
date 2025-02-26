@@ -1,4 +1,6 @@
 ﻿using Application.Contracts.RepositoryContracts;
+using Application.DataTransferObjects.TasksDto;
+using Application.Messaging;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
@@ -31,6 +33,14 @@ public class CreateTaskCommandHandler(
         
         taskEntity.TaskTags = existingTags;
         await repository.Task.Create(taskEntity, cancellationToken);
+
+        var taskEventDto = new TaskEventDto();
+        mapper.Map(request.TaskDto, taskEventDto);
+        
+        using (var producer = new TaskCreatedProducer())
+        {
+            producer.PublishTaskCreatedEvent(taskEventDto);
+        }
         
         return Unit.Value; 
     }

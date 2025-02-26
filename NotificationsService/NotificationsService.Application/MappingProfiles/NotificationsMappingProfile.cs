@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using NotificationsService.Application.DataTransferObjects.NotificationsDto;
+using NotificationsService.Application.DataTransferObjects.TaskEventDto;
 using NotificationsService.Application.UseCases.Commands.NotificationCommands.CreateNotification;
 using NotificationsService.Application.UseCases.Commands.NotificationCommands.UpdateNotification;
 using NotificationsService.Domain.Models;
@@ -31,5 +32,8 @@ public class NotificationsMappingProfile : Profile
             .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.NotificationDto.Deadline))
             .ForMember(dest => dest.MinutesBeforeDeadline, opt => opt.MapFrom(src => src.NotificationDto.MinutesBeforeDeadline))
             .ForMember(dest => dest.UserTimeZone, opt => opt.MapFrom(src => src.NotificationDto.UserTimeZone));
+
+        CreateMap<TaskEventDto, NotificationDto>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
     }
 }

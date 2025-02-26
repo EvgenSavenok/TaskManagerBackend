@@ -66,5 +66,7 @@ public class TasksMappingProfile : Profile
                     Name = tagDto.TagName 
                 }).ToList()))
             .ForMember(dest => dest.TaskComments, opt => opt.MapFrom(src => src.TaskDto.TaskComments));
+
+        CreateMap<TaskDto, TaskEventDto>();
     }
 }
