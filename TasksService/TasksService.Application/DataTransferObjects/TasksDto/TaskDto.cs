@@ -15,6 +15,12 @@ public record TaskDto
     public Priority Priority { get; set; }
     public DateTime Deadline { get; set; }
     
+    public int MinutesBeforeDeadline { get; set; }
+    
+    public string UserTimeZone { get; set; }
+    
+    public string UserEmail { get; set; }
+    
     public List<TagDto> TaskTags { get; set; } = new();
     public List<CommentDto> TaskComments { get; set; } = new ();
 }

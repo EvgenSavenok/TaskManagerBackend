@@ -15,12 +15,6 @@ public class NotificationValidator : AbstractValidator<Notification>
             .NotEmpty().WithMessage("MinutesBeforeDeadline is required.")
             .GreaterThanOrEqualTo(0).WithMessage("MinutesBeforeDeadline must be non-negative.");
         
-        RuleFor(notification => notification.UserId)
-            .NotEmpty().WithMessage("UserId is required.");
-        
-        RuleFor(notification => notification.TaskId)
-            .NotEmpty().WithMessage("TaskId is required.");
-        
         RuleFor(notification => notification.CreatedAt)
             .NotEmpty().WithMessage("CreatedAt is required.")
             .Must(createdAt => createdAt <= DateTime.UtcNow)
