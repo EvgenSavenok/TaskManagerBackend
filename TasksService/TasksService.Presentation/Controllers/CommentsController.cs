@@ -5,6 +5,7 @@ using Application.UseCases.Commands.CommentCommands.UpdateComment;
 using Application.UseCases.Queries.CommentQueries.GetAllCommentsOfTask;
 using Application.UseCases.Queries.CommentQueries.GetCommentById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TasksService.Presentation.Controllers;
@@ -15,6 +16,7 @@ public class CommentsController(
     IMediator mediator) : Controller
 {
     [HttpGet("getComment/{commentId}")]
+    [Authorize(Policy = "User")]
     public async Task<IActionResult> GetCommentById(
         Guid commentId,
         CancellationToken cancellationToken)
@@ -28,6 +30,7 @@ public class CommentsController(
     }
     
     [HttpGet("{taskId}/getAllCommentsOfTask")]
+    [Authorize(Policy = "User")]
     public async Task<IActionResult> GetAllCommentsOfTask(
         Guid taskId, 
         CancellationToken cancellationToken)
@@ -41,6 +44,7 @@ public class CommentsController(
     }
     
     [HttpPost("addComment")]
+    [Authorize(Policy = "User")]
     public async Task<IActionResult> AddComment(
         [FromBody]CommentDto commentDto, 
         CancellationToken cancellationToken)
@@ -55,6 +59,7 @@ public class CommentsController(
     }
     
     [HttpPut("updateComment")]
+    [Authorize(Policy = "User")]
     public async Task<IActionResult> UpdateComment(
         [FromBody]CommentDto commentDto, 
         CancellationToken cancellationToken)
@@ -69,6 +74,7 @@ public class CommentsController(
     }
     
     [HttpDelete("deleteComment/{commentId}")]
+    [Authorize(Policy = "User")]
     public async Task<IActionResult> DeleteComment(
         Guid commentId,
         CancellationToken cancellationToken)

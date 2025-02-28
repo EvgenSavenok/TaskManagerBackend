@@ -1,4 +1,6 @@
-﻿namespace NotificationsService.Application.Contracts.RepositoryContracts;
+﻿using NotificationsService.Domain.Models;
+
+namespace NotificationsService.Application.Contracts.RepositoryContracts;
 
 public interface IRepositoryManager
 {

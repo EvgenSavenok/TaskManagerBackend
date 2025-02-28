@@ -1,6 +1,5 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using NotificationsService.Domain.Enums;
 
 namespace NotificationsService.Domain.Models;
 
@@ -11,16 +10,10 @@ public class Notification
     public Guid Id { get; set; } 
     
     [BsonRepresentation(BsonType.String)]
-    public Guid UserId { get; set; }
-    
-    [BsonRepresentation(BsonType.String)]
-    public Guid TaskId { get; set; } 
-    
+    public Guid TaskId { get; set; }
     
     public string Title { get; set; } 
     
-    public Status Status { get; set; } 
-
     public DateTime CreatedAt { get; set; } 
     
     [BsonDateTimeOptions(Kind = DateTimeKind.Utc)] 
@@ -30,10 +23,7 @@ public class Notification
 
     public DateTime ReminderTime => Deadline.AddMinutes(-MinutesBeforeDeadline);
     
-    // Need to get user email from the broker
-    // TODO
-    
-    public string UserEmail { get; set; } = "eugen.savenok2@gmail.com";
+    public string UserEmail { get; set; } 
     
     public string UserTimeZone { get; set; }
     

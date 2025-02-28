@@ -1,23 +1,26 @@
-﻿using FluentValidation;
+﻿using System.Text;
+using FluentValidation;
 using Hangfire;
 using Hangfire.Mongo;
 using Hangfire.Mongo.Migration.Strategies;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 using NotificationsService.Application.Contracts.RepositoryContracts;
 using NotificationsService.Application.Contracts.ServicesContracts;
 using NotificationsService.Application.EmailService;
 using NotificationsService.Application.Validation;
+using NotificationsService.Infrastructure.Messaging;
 using NotificationsService.Infrastructure.Repositories;
 
 namespace NotificationsService.Infrastructure.Extensions;
 
 public static class ServiceExtensions
 {
-    public static IServiceCollection AddMongoDb(
-        this IServiceCollection services, 
+    public static void AddMongoDb(this IServiceCollection services,
         IConfiguration configuration)
     {
         var mongoSettings = configuration.GetConnectionString("MongoDb");
@@ -26,8 +29,6 @@ public static class ServiceExtensions
 
         services.AddSingleton(database);
         services.AddScoped<INotificationsRepository, NotificationsRepository>();
-
-        return services;
     }
     
     public static void ConfigureRepositoryManager(this IServiceCollection services) =>
@@ -56,5 +57,53 @@ public static class ServiceExtensions
     {
         services.AddSingleton<ISmtpService, SmtpService>();
         services.AddScoped<IHangfireService, HangfireService>();
+    }
+    
+    public static void ConfigureSwagger(this IServiceCollection services)
+    {
+        services.AddSwaggerGen(s =>
+        {
+            s.SwaggerDoc("v1", new OpenApiInfo { Title = "Task manager API", Version = "v1"
+            });
+        });
+    }
+    
+    public static void AddAuthorizationPolicy(this IServiceCollection services) =>
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("User", policy =>
+                policy.RequireRole("User")); 
+        });
+    
+    public static void ConfigureJwt(this IServiceCollection services, IConfiguration configuration)
+    {
+        var jwtSettings = configuration.GetSection("JwtSettings");
+        var secretKey = jwtSettings["ValidIssuer"];
+        
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings["ValidIssuer"],
+                    ValidAudience = jwtSettings["ValidAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                };
+            });
+    }
+
+    public static void ConfigureRabbitMq(this IServiceCollection services)
+    {
+        services.AddHostedService<TaskCreatedConsumer>();
+        services.AddHostedService<TaskUpdatedConsumer>();
+        services.AddHostedService<TaskDeletedConsumer>();
     }
 }

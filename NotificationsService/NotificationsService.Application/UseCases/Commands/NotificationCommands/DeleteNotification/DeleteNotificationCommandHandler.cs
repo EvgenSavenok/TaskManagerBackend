@@ -12,22 +12,22 @@ public class DeleteNotificationCommandHandler(
 {
     public async Task<Unit> Handle(DeleteNotificationCommand request, CancellationToken cancellationToken)
     {
-        var notificationId = request.Id;
+        var taskId = request.Id;
         
         var notifications = await repository.Notification.FindByCondition(
-            notification => notification.Id == notificationId,
+            notification => notification.TaskId == taskId,
             cancellationToken);
 
         var notification = notifications.FirstOrDefault();
 
         if (notification is null)
         {
-            throw new NotFoundException($"Уведомление с ID {notificationId} не найдено.");
+            throw new NotFoundException($"Уведомление с ID {taskId} не найдено.");
         }
         
         hangfireService.DeleteNotificationInHangfire(notification.HangfireJobId);
 
-        await repository.Notification.Delete(n => n.Id == notificationId, cancellationToken);
+        await repository.Notification.Delete(n => n.TaskId == taskId, cancellationToken);
         
         return Unit.Value;
     }

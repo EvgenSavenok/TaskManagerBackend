@@ -1,10 +1,15 @@
-﻿using Application.Contracts.RepositoryContracts;
+﻿using System.Text;
+using Application.Contracts.MessagingContracts;
+using Application.Contracts.RepositoryContracts;
 using Application.Validation;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using TasksService.Infrastructure.Messaging;
 using TasksService.Infrastructure.Repositories;
 
 namespace TasksService.Infrastructure.Extensions;
@@ -32,5 +37,46 @@ public static class ServiceExtensions
         services.AddValidatorsFromAssemblyContaining<TaskValidator>();
         services.AddValidatorsFromAssemblyContaining<TagValidator>();
         services.AddValidatorsFromAssemblyContaining<CommentValidator>();
+    }
+
+    public static void ConfigureJwt(this IServiceCollection services, IConfiguration configuration)
+    {
+        var jwtSettings = configuration.GetSection("JwtSettings");
+        var secretKey = jwtSettings["ValidIssuer"];
+        
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings["ValidIssuer"],
+                    ValidAudience = jwtSettings["ValidAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                };
+            });
+    }
+    
+    public static void AddAuthorizationPolicy(this IServiceCollection services) =>
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Admin", policy =>
+                policy.RequireRole("Administrator")); 
+            options.AddPolicy("User", policy =>
+                policy.RequireRole("User")); 
+        });
+
+    public static void AddMessageBrokerServices(this IServiceCollection services)
+    {
+        services.AddSingleton<ITaskCreatedProducer, TaskCreatedProducer>();
+        services.AddSingleton<ITaskUpdatedProducer, TaskUpdatedProducer>();
+        services.AddSingleton<ITaskDeletedProducer, TaskDeletedProducer>();
     }
 }

@@ -20,14 +20,14 @@ public class UpdateNotificationCommandHandler(
     {
         var notificationDto = request.NotificationDto;
 
+        var taskId = request.NotificationDto.TaskId.ToString();
         var notifications = await repository.Notification.FindByCondition(
-            c => c.Id == notificationDto.Id,
-            cancellationToken);
+            c => c.TaskId.ToString() == taskId, cancellationToken);
         var notificationEntity = notifications.FirstOrDefault();
 
         if (notificationEntity == null)
         {
-            throw new NotFoundException($"Notification with id {notificationDto.Id} not found");
+            throw new NotFoundException($"Notification with task id {notificationDto.TaskId} not found");
         }
 
         DateTime oldDeadline = notificationEntity.Deadline;
@@ -39,7 +39,7 @@ public class UpdateNotificationCommandHandler(
         {
             throw new ValidationException(validationResult.Errors);
         }
-
+        
         if (!oldDeadline.Equals(notificationEntity.Deadline))
         {
             notificationEntity.Deadline = DateTime.SpecifyKind(notificationEntity.Deadline, DateTimeKind.Local);
@@ -48,8 +48,8 @@ public class UpdateNotificationCommandHandler(
             hangfireService.DeleteNotificationInHangfire(notificationEntity.HangfireJobId);
             hangfireService.ScheduleNotificationInHangfire(notificationEntity, cancellationToken);
         }
-
-        await repository.Notification.Update(notificationEntity, cancellationToken);
+        
+        await repository.Notification.UpdateNotificationByTaskId(notificationEntity, cancellationToken);
         
         return Unit.Value;
     }

@@ -12,10 +12,13 @@
 
     <ItemGroup>
       <PackageReference Include="Hangfire.Mongo" Version="1.11.3" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.2" />
       <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.3.0" />
       <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.2" />
       <PackageReference Include="MongoDB.Driver" Version="3.2.0" />
+      <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
     </ItemGroup>
 
 </Project>

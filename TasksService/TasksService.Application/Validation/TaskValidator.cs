@@ -21,9 +21,6 @@ public class TaskValidator : AbstractValidator<CustomTask>
         RuleFor(task => task.Priority)
             .NotEmpty().WithMessage("Priority is required.");
         
-        RuleFor(task => task.CreatedAt)
-            .NotEmpty().WithMessage("Creation date is required.");
-        
         RuleFor(task => task.Title)
             .NotEmpty().WithMessage("Title is required.")
             .MaximumLength(100).WithMessage("Title must not exceed 100 characters");

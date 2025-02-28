@@ -1,4 +1,6 @@
-﻿using Application.Contracts.RepositoryContracts;
+﻿using Application.Contracts.MessagingContracts;
+using Application.Contracts.RepositoryContracts;
+using Application.DataTransferObjects.TasksDto;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
@@ -9,7 +11,8 @@ namespace Application.UseCases.Commands.TaskCommands.CreateTask;
 public class CreateTaskCommandHandler(
     IRepositoryManager repository,
     IMapper mapper,
-    IValidator<CustomTask> validator)
+    IValidator<CustomTask> validator,
+    ITaskCreatedProducer taskCreatedProducer)
     : IRequestHandler<CreateTaskCommand>
 {
     public async Task<Unit> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
@@ -31,6 +34,11 @@ public class CreateTaskCommandHandler(
         
         taskEntity.TaskTags = existingTags;
         await repository.Task.Create(taskEntity, cancellationToken);
+
+        var taskEventDto = mapper.Map<CreateTaskEventDto>(request.TaskDto);
+        taskEventDto.TaskId = taskEntity.Id;
+        
+        taskCreatedProducer.PublishTaskCreatedEvent(taskEventDto);
         
         return Unit.Value; 
     }

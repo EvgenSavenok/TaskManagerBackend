@@ -9,7 +9,7 @@ public abstract class RepositoryBase<T>(
     string collectionName) 
     : IRepositoryBase<T> where T : class
 {
-    private readonly IMongoCollection<T> _collection = database.GetCollection<T>(collectionName);
+    public readonly IMongoCollection<T> _collection = database.GetCollection<T>(collectionName);
 
     public async Task<IEnumerable<T>> FindAll(CancellationToken cancellationToken = default)
     {

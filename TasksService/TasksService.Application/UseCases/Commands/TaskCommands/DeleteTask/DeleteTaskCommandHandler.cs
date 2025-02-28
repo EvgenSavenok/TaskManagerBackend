@@ -1,10 +1,13 @@
-﻿using Application.Contracts.RepositoryContracts;
+﻿using Application.Contracts.MessagingContracts;
+using Application.Contracts.RepositoryContracts;
 using MediatR;
 using TasksService.Domain.CustomExceptions;
 
 namespace Application.UseCases.Commands.TaskCommands.DeleteTask;
 
-public class DeleteTaskCommandHandler (IRepositoryManager repository)
+public class DeleteTaskCommandHandler(
+    IRepositoryManager repository,
+    ITaskDeletedProducer taskDeletedProducer)
     : IRequestHandler<DeleteTaskCommand>
 {
     public async Task<Unit> Handle(DeleteTaskCommand request, CancellationToken cancellationToken)
@@ -18,6 +21,8 @@ public class DeleteTaskCommandHandler (IRepositoryManager repository)
         }
 
         await repository.Task.Delete(taskEntity, cancellationToken);
+        
+        taskDeletedProducer.PublishTaskDeletedEvent(taskId);
         
         return Unit.Value;
     }
