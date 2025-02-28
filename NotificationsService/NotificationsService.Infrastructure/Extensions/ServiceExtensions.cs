@@ -104,5 +104,6 @@ public static class ServiceExtensions
     {
         services.AddHostedService<TaskCreatedConsumer>();
         services.AddHostedService<TaskUpdatedConsumer>();
+        services.AddHostedService<TaskDeletedConsumer>();
     }
 }

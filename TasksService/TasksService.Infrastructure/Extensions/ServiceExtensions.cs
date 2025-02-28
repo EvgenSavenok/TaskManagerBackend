@@ -77,5 +77,6 @@ public static class ServiceExtensions
     {
         services.AddSingleton<ITaskCreatedProducer, TaskCreatedProducer>();
         services.AddSingleton<ITaskUpdatedProducer, TaskUpdatedProducer>();
+        services.AddSingleton<ITaskDeletedProducer, TaskDeletedProducer>();
     }
 }

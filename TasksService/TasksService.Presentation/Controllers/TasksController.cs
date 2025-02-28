@@ -70,7 +70,7 @@ public class TasksController(
     }
 
     [HttpDelete("deleteTask/{taskId}")]
-    [Authorize(Policy = "User")]
+    //[Authorize(Policy = "User")]
     public async Task<IActionResult> DeleteTask(Guid taskId, CancellationToken cancellationToken)
     {
         var command = new DeleteTaskCommand { TaskId = taskId };
