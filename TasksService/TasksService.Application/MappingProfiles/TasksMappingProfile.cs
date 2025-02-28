@@ -13,7 +13,7 @@ public class TasksMappingProfile : Profile
     public TasksMappingProfile()
     {
         CreateMap<TaskDto, CustomTask>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.TaskId))
             .ForMember(dest => dest.TaskTags, opt => opt.MapFrom(src =>
                 src.TaskTags.Select(tagDto => new Tag
                 {
@@ -52,7 +52,7 @@ public class TasksMappingProfile : Profile
                 }).ToList()));
         
         CreateMap<UpdateTaskCommand, CustomTask>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.TaskDto.Id))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.TaskDto.TaskId))
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.TaskDto.Title))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.TaskDto.Description))
@@ -67,6 +67,10 @@ public class TasksMappingProfile : Profile
                 }).ToList()))
             .ForMember(dest => dest.TaskComments, opt => opt.MapFrom(src => src.TaskDto.TaskComments));
 
-        CreateMap<TaskDto, TaskEventDto>();
+        CreateMap<TaskDto, CreateTaskEventDto>()
+            .ForMember(dest => dest.TaskId, opt => opt.MapFrom(src => src.TaskId));
+
+        CreateMap<TaskDto, UpdateTaskEventDto>()
+            .ForMember(dest => dest.TaskId, opt => opt.MapFrom(src => src.TaskId));
     }
 }

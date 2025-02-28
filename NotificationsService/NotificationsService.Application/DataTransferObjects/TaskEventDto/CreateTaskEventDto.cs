@@ -1,6 +1,6 @@
 ﻿namespace NotificationsService.Application.DataTransferObjects.TaskEventDto;
 
-public record TaskEventDto
+public record CreateTaskEventDto
 {
     public Guid TaskId { get; set; }
     

@@ -45,14 +45,17 @@ public class TasksController(
     //[Authorize(Policy = "User")]
     public async Task<IActionResult> CreateTask([FromBody]TaskDto taskDto)
     {
-        var command = new CreateTaskCommand { TaskDto = taskDto };
+        var command = new CreateTaskCommand
+        {
+            TaskDto = taskDto
+        };
         await mediator.Send(command);
         
         return NoContent();
     }
 
     [HttpPut("updateTask")]
-    [Authorize(Policy = "User")]
+    //[Authorize(Policy = "User")]
     public async Task<IActionResult> UpdateTask(
         [FromBody] TaskDto taskDto, 
         CancellationToken cancellationToken)

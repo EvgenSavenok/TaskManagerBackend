@@ -1,6 +1,6 @@
 ﻿namespace Application.DataTransferObjects.TasksDto;
 
-public record TaskEventDto
+public record UpdateTaskEventDto
 {
     public Guid TaskId { get; set; }
     

@@ -10,14 +10,14 @@ using NotificationsService.Application.UseCases.Commands.NotificationCommands.Cr
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace NotificationsService.Application.Messaging;
+namespace NotificationsService.Infrastructure.Messaging;
 
 public class TaskCreatedConsumer : BackgroundService
 {
     private readonly IModel _channel;
     private readonly IServiceProvider _serviceProvider;
     private const string ExchangeName = "create_task_exchange";
-    private const string QueueName = "task_notifications_queue";
+    private const string QueueName = "created_task_notifications_queue";
 
     public TaskCreatedConsumer(IServiceProvider serviceProvider)
     {
@@ -38,7 +38,7 @@ public class TaskCreatedConsumer : BackgroundService
         {
             var body = eventArgs.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-            var taskCreatedEvent = JsonSerializer.Deserialize<TaskEventDto>(message);
+            var taskCreatedEvent = JsonSerializer.Deserialize<CreateTaskEventDto>(message);
 
             using var scope = _serviceProvider.CreateScope();
             var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();

@@ -12,8 +12,8 @@ using MongoDB.Driver;
 using NotificationsService.Application.Contracts.RepositoryContracts;
 using NotificationsService.Application.Contracts.ServicesContracts;
 using NotificationsService.Application.EmailService;
-using NotificationsService.Application.Messaging;
 using NotificationsService.Application.Validation;
+using NotificationsService.Infrastructure.Messaging;
 using NotificationsService.Infrastructure.Repositories;
 
 namespace NotificationsService.Infrastructure.Extensions;
@@ -103,5 +103,6 @@ public static class ServiceExtensions
     public static void ConfigureRabbitMq(this IServiceCollection services)
     {
         services.AddHostedService<TaskCreatedConsumer>();
+        services.AddHostedService<TaskUpdatedConsumer>();
     }
 }

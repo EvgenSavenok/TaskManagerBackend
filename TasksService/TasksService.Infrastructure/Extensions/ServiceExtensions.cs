@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Application.Contracts.MessagingContracts;
 using Application.Contracts.RepositoryContracts;
 using Application.Validation;
 using FluentValidation;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using TasksService.Infrastructure.Messaging;
 using TasksService.Infrastructure.Repositories;
 
 namespace TasksService.Infrastructure.Extensions;
@@ -70,4 +72,10 @@ public static class ServiceExtensions
             options.AddPolicy("User", policy =>
                 policy.RequireRole("User")); 
         });
+
+    public static void AddMessageBrokerServices(this IServiceCollection services)
+    {
+        services.AddSingleton<ITaskCreatedProducer, TaskCreatedProducer>();
+        services.AddSingleton<ITaskUpdatedProducer, TaskUpdatedProducer>();
+    }
 }

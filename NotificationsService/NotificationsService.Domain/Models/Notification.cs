@@ -9,6 +9,9 @@ public class Notification
     [BsonRepresentation(BsonType.String)]
     public Guid Id { get; set; } 
     
+    [BsonRepresentation(BsonType.String)]
+    public Guid TaskId { get; set; }
+    
     public string Title { get; set; } 
     
     public DateTime CreatedAt { get; set; } 

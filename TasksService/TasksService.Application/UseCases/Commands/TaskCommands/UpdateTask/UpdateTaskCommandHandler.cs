@@ -1,4 +1,6 @@
-﻿using Application.Contracts.RepositoryContracts;
+﻿using Application.Contracts.MessagingContracts;
+using Application.Contracts.RepositoryContracts;
+using Application.DataTransferObjects.TasksDto;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
@@ -10,12 +12,13 @@ namespace Application.UseCases.Commands.TaskCommands.UpdateTask;
 public class UpdateTaskCommandHandler(
     IRepositoryManager repository,
     IMapper mapper,
-    IValidator<CustomTask> validator)
+    IValidator<CustomTask> validator,
+    ITaskUpdatedProducer taskUpdatedProducer)
     : IRequestHandler<UpdateTaskCommand>
 {
     public async Task<Unit> Handle(UpdateTaskCommand request, CancellationToken cancellationToken)
     {
-        var taskId = request.TaskDto.Id;
+        var taskId = request.TaskDto.TaskId;
     
         var taskEntity = await repository.Task.GetTaskByIdAsync(
             taskId, 
@@ -45,6 +48,11 @@ public class UpdateTaskCommandHandler(
         taskEntity.TaskTags = tagsToAdd;
         
         await repository.Task.Update(taskEntity, cancellationToken);
+        
+        var taskEventDto = new UpdateTaskEventDto();
+        mapper.Map(request.TaskDto, taskEventDto);
+        
+        taskUpdatedProducer.PublishTaskUpdatedEvent(taskEventDto);
     
         return Unit.Value;
     }

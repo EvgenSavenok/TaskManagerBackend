@@ -13,6 +13,7 @@ public class NotificationsMappingProfile : Profile
     {
         CreateMap<CreateNotificationCommand, Notification>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()))
+            .ForMember(dest => dest.TaskId, opt => opt.MapFrom(src => src.NotificationDto.TaskId))
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.NotificationDto.Title))
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
             .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.NotificationDto.Deadline))
@@ -23,13 +24,16 @@ public class NotificationsMappingProfile : Profile
         CreateMap<Notification, NotificationDto>();
 
         CreateMap<UpdateNotificationCommand, Notification>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.NotificationDto.Id))
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.NotificationDto.Title))
             .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.NotificationDto.Deadline))
             .ForMember(dest => dest.MinutesBeforeDeadline, opt => opt.MapFrom(src => src.NotificationDto.MinutesBeforeDeadline))
             .ForMember(dest => dest.UserTimeZone, opt => opt.MapFrom(src => src.NotificationDto.UserTimeZone));
 
-        CreateMap<TaskEventDto, NotificationDto>()
+        CreateMap<CreateTaskEventDto, NotificationDto>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
+        
+        CreateMap<UpdateTaskEventDto, NotificationDto>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.TaskId));
     }
 }

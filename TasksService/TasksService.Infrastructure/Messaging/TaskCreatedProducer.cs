@@ -1,33 +1,27 @@
 ﻿using System.Text;
 using System.Text.Json;
+using Application.Contracts.MessagingContracts;
 using Application.DataTransferObjects.TasksDto;
 using RabbitMQ.Client;
 
-namespace Application.Messaging;
+namespace TasksService.Infrastructure.Messaging;
 
-public class TaskCreatedProducer : IDisposable
+public class TaskCreatedProducer : ITaskCreatedProducer
 {
-    private readonly IConnection _connection;
     private readonly IModel _channel;
     private const string ExchangeName = "create_task_exchange";
 
     public TaskCreatedProducer()
     {
         var factory = new ConnectionFactory { HostName = "localhost" };
-        _connection = factory.CreateConnection();
-        _channel = _connection.CreateModel();
+        var connection = factory.CreateConnection();
+        _channel = connection.CreateModel();
         _channel.ExchangeDeclare(exchange: ExchangeName, type: ExchangeType.Fanout);
     }
     
-    public void PublishTaskCreatedEvent(TaskEventDto taskEventDto)
+    public void PublishTaskCreatedEvent(CreateTaskEventDto createTaskEventDto)
     {
-        var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(taskEventDto));
+        var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(createTaskEventDto));
         _channel.BasicPublish(exchange: ExchangeName, routingKey: "", body: body);
-    }
-
-    public void Dispose()
-    {
-        _channel.Close();
-        _connection.Close();
     }
 }
