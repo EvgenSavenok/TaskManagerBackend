@@ -9,6 +9,8 @@ public record TaskDto
 {
     public Guid TaskId { get; set; }
     
+    public string UserId { get; set; }
+    
     public string Title { get; set; } 
     public string Description { get; set; }
     public Category Category { get; set; }

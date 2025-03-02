@@ -12,6 +12,7 @@ builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddMessageBrokerServices();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddGrpcServices();
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 builder.Services.ConfigureSwagger();

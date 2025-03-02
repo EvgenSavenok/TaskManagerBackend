@@ -42,9 +42,12 @@ public class TasksController(
     }
     
     [HttpPost("addTask")]
-    //[Authorize(Policy = "User")]
+    [Authorize(Policy = "User")]
     public async Task<IActionResult> CreateTask([FromBody]TaskDto taskDto)
     {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        taskDto.UserId = userIdClaim!.Value;
+        
         var command = new CreateTaskCommand
         {
             TaskDto = taskDto

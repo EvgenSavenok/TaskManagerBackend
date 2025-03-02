@@ -1,14 +1,17 @@
 ﻿using System.Text;
+using Application.Contracts.Grpc;
 using Application.Contracts.MessagingContracts;
 using Application.Contracts.RepositoryContracts;
 using Application.Validation;
 using FluentValidation;
+using GrpcService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using TasksService.Infrastructure.Grpc;
 using TasksService.Infrastructure.Messaging;
 using TasksService.Infrastructure.Repositories;
 
@@ -78,5 +81,10 @@ public static class ServiceExtensions
         services.AddSingleton<ITaskCreatedProducer, TaskCreatedProducer>();
         services.AddSingleton<ITaskUpdatedProducer, TaskUpdatedProducer>();
         services.AddSingleton<ITaskDeletedProducer, TaskDeletedProducer>();
+    }
+
+    public static void AddGrpcServices(this IServiceCollection services)
+    {
+        services.AddScoped<IUserGrpcService, GrpcUserService>();
     }
 }

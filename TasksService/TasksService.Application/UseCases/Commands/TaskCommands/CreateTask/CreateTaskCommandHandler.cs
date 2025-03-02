@@ -1,4 +1,5 @@
-﻿using Application.Contracts.MessagingContracts;
+﻿using Application.Contracts.Grpc;
+using Application.Contracts.MessagingContracts;
 using Application.Contracts.RepositoryContracts;
 using Application.DataTransferObjects.TasksDto;
 using AutoMapper;
@@ -12,7 +13,8 @@ public class CreateTaskCommandHandler(
     IRepositoryManager repository,
     IMapper mapper,
     IValidator<CustomTask> validator,
-    ITaskCreatedProducer taskCreatedProducer)
+    ITaskCreatedProducer taskCreatedProducer,
+    IUserGrpcService userGrpcService)
     : IRequestHandler<CreateTaskCommand>
 {
     public async Task<Unit> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
@@ -34,9 +36,12 @@ public class CreateTaskCommandHandler(
         
         taskEntity.TaskTags = existingTags;
         await repository.Task.Create(taskEntity, cancellationToken);
+        
+        var userEmail = await userGrpcService.GetUserEmailAsync(request.TaskDto.UserId);
 
         var taskEventDto = mapper.Map<CreateTaskEventDto>(request.TaskDto);
         taskEventDto.TaskId = taskEntity.Id;
+        taskEventDto.UserEmail = userEmail;
         
         taskCreatedProducer.PublishTaskCreatedEvent(taskEventDto);
         

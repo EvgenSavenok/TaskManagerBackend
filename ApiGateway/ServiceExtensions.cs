@@ -24,6 +24,12 @@ public static class ServiceExtensions
                 policy.AllowAnyMethod();
                 policy.AllowAnyHeader();
             });
+            options.AddPolicy("GrpcPolicy", policy =>
+            {
+                policy.WithOrigins("http://localhost:5220");
+                policy.AllowAnyMethod();
+                policy.AllowAnyHeader();
+            });
         });
     }
 }
