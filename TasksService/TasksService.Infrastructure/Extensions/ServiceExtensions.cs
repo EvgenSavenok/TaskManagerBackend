@@ -1,10 +1,10 @@
 ﻿using System.Text;
 using Application.Contracts.Grpc;
 using Application.Contracts.MessagingContracts;
+using Application.Contracts.Redis;
 using Application.Contracts.RepositoryContracts;
 using Application.Validation;
 using FluentValidation;
-using GrpcService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TasksService.Infrastructure.Grpc;
 using TasksService.Infrastructure.Messaging;
+using TasksService.Infrastructure.Redis;
 using TasksService.Infrastructure.Repositories;
 
 namespace TasksService.Infrastructure.Extensions;
@@ -86,5 +87,11 @@ public static class ServiceExtensions
     public static void AddGrpcServices(this IServiceCollection services)
     {
         services.AddScoped<IUserGrpcService, GrpcUserService>();
+    }
+
+    public static void ConfigureRedis(this IServiceCollection services, IConfiguration configuration)
+    {
+        var redisConnection = configuration["Redis:ConnectionString"];
+        services.AddSingleton<IRedisCacheService>(_ => new RedisCacheService(redisConnection));
     }
 }

@@ -12,6 +12,4 @@ public record UpdateTaskEventDto
     public int MinutesBeforeDeadline { get; set; }
     
     public string UserTimeZone { get; set; }
-    
-    public string UserEmail { get; set; }
 }

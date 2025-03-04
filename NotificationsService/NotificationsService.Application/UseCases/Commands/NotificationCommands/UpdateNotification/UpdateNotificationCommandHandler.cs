@@ -37,7 +37,7 @@ public class UpdateNotificationCommandHandler(
         var validationResult = await validator.ValidateAsync(notificationEntity, cancellationToken);
         if (!validationResult.IsValid)
         {
-            throw new ValidationException(validationResult.Errors);
+            throw new ValidationException(validationResult.Errors.ToString());
         }
         
         if (!oldDeadline.Equals(notificationEntity.Deadline))

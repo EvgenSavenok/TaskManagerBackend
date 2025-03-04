@@ -3,6 +3,7 @@ using FluentValidation;
 using MediatR;
 using NotificationsService.Application.Contracts.RepositoryContracts;
 using NotificationsService.Application.Contracts.ServicesContracts;
+using NotificationsService.Domain.CustomExceptions;
 using NotificationsService.Domain.Models;
 
 namespace NotificationsService.Application.UseCases.Commands.NotificationCommands.CreateNotification;
@@ -21,7 +22,7 @@ public class CreateNotificationCommandHandler(
         var validationResult = await validator.ValidateAsync(notificationEntity, cancellationToken);
         if (!validationResult.IsValid)
         {
-            throw new ValidationException(validationResult.Errors);
+            throw new ValidationException(validationResult.Errors.ToString());
         }
         
         notificationEntity.Deadline = DateTime.SpecifyKind(notificationEntity.Deadline, DateTimeKind.Local);

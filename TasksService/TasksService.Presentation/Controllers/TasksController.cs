@@ -17,7 +17,7 @@ public class TasksController(
     IMediator mediator) : Controller
 {
     [HttpGet("getTaskById/{id}")]
-    [Authorize(Policy = "User")]
+    //[Authorize(Policy = "User")]
     public async Task<IActionResult> GetTask(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetTaskByIdQuery(id) { TaskId = id };

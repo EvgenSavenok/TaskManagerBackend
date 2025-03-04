@@ -1,5 +1,6 @@
 using MediatR;
 using TasksService.Infrastructure.Extensions;
+using TasksService.Infrastructure.Grpc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ builder.Services.AddValidators();
 builder.Services.AddAuthorizationPolicy();
 builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.ConfigureRedis(builder.Configuration);
 builder.Services.AddMessageBrokerServices();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddGrpcServices();
@@ -18,6 +20,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.ConfigureSwagger();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddGrpc();
     
 var app = builder.Build();
 
@@ -36,5 +39,7 @@ app.ConfigureExceptionHandler();
 
 app.MapControllers();
 app.MapRazorPages();
+
+app.MapGrpcService<GrpcUserService>();
 
 app.Run();
