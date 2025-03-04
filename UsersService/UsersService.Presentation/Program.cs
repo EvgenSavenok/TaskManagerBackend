@@ -12,6 +12,7 @@ builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.ConfigureIdentity();
 builder.Services.AddAuthorizationPolicy();
 builder.Services.ConfigureJwt(builder.Configuration);
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAuthenticationManager, AuthenticationManager>();
 builder.Services.AddRazorPages();

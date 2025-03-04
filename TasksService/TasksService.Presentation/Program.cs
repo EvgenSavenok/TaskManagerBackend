@@ -13,8 +13,9 @@ builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.ConfigureRedis(builder.Configuration);
 builder.Services.AddMessageBrokerServices();
-builder.Services.AddHttpContextAccessor();
 builder.Services.AddGrpcServices();
+
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 builder.Services.ConfigureSwagger();

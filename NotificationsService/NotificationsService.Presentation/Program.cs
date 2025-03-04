@@ -11,14 +11,15 @@ builder.Services.AddValidators();
 builder.Services.AddAuthorizationPolicy();
 builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.ConfigureEmailService();
+builder.Services.ConfigureHangfire(builder.Configuration);
+builder.Services.ConfigureRabbitMq();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 builder.Services.ConfigureSwagger();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.ConfigureEmailService();
-builder.Services.ConfigureHangfire(builder.Configuration);
-builder.Services.ConfigureRabbitMq();
 
 var app = builder.Build();
 
