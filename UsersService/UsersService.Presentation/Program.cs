@@ -6,6 +6,7 @@ using UsersService.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+ServiceExtensions.ConfigureSerilog(builder);
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());

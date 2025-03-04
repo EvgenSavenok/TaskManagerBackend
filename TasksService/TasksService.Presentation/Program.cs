@@ -4,6 +4,7 @@ using TasksService.Infrastructure.Grpc;
 
 var builder = WebApplication.CreateBuilder(args);
 
+ServiceExtensions.ConfigureSerilog(builder);
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureRepositoryManager();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

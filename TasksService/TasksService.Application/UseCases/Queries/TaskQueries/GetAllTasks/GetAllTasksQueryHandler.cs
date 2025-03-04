@@ -3,6 +3,7 @@ using Application.Contracts.RepositoryContracts;
 using Application.DataTransferObjects.TasksDto;
 using AutoMapper;
 using MediatR;
+using Serilog;
 
 namespace Application.UseCases.Queries.TaskQueries.GetAllTasks;
 
@@ -14,6 +15,8 @@ public class GetAllTasksQueryHandler(
 {
     public async Task<IEnumerable<TaskDto>> Handle(GetAllTasksQuery request, CancellationToken cancellationToken)
     {
+        Log.Information("User message: {Message}", "Get all tasks");
+
         var userId = Guid.Parse(request.UserId.Value);
         string cacheKey = $"tasks:user:{userId}";
           

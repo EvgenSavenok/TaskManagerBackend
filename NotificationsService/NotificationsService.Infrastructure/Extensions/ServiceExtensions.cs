@@ -4,6 +4,7 @@ using Hangfire;
 using Hangfire.Mongo;
 using Hangfire.Mongo.Migration.Strategies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -15,6 +16,7 @@ using NotificationsService.Application.EmailService;
 using NotificationsService.Application.Validation;
 using NotificationsService.Infrastructure.Messaging;
 using NotificationsService.Infrastructure.Repositories;
+using Serilog;
 
 namespace NotificationsService.Infrastructure.Extensions;
 
@@ -105,5 +107,23 @@ public static class ServiceExtensions
         services.AddHostedService<TaskCreatedConsumer>();
         services.AddHostedService<TaskUpdatedConsumer>();
         services.AddHostedService<TaskDeletedConsumer>();
+    }
+    
+    public static void ConfigureSerilog(WebApplicationBuilder builder)
+    {
+        builder.Host.UseSerilog((context, config) =>
+        {
+            config
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.Elasticsearch(
+                    new Serilog.Sinks.Elasticsearch.ElasticsearchSinkOptions(
+                        new Uri("http://localhost:9200"))
+                {
+                    AutoRegisterTemplate = true,
+                    IndexFormat = "microservices-logs-{0:yyyy.MM.dd}"
+                })
+                .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day);
+        });
     }
 }

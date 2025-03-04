@@ -6,11 +6,13 @@ using Application.Contracts.RepositoryContracts;
 using Application.Validation;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using TasksService.Infrastructure.Grpc;
 using TasksService.Infrastructure.Messaging;
 using TasksService.Infrastructure.Redis;
@@ -93,5 +95,23 @@ public static class ServiceExtensions
     {
         var redisConnection = configuration["Redis:ConnectionString"];
         services.AddSingleton<IRedisCacheService>(_ => new RedisCacheService(redisConnection));
+    }
+    
+    public static void ConfigureSerilog(WebApplicationBuilder builder)
+    {
+        builder.Host.UseSerilog((context, config) =>
+        {
+            config
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.Elasticsearch(
+                    new Serilog.Sinks.Elasticsearch.ElasticsearchSinkOptions(
+                        new Uri("http://localhost:9200"))
+                {
+                    AutoRegisterTemplate = true,
+                    IndexFormat = "microservices-logs-{0:yyyy.MM.dd}"
+                })
+                .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day);
+        });
     }
 }
