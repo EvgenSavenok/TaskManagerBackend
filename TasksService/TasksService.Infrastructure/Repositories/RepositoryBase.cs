@@ -12,6 +12,7 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
         _repositoryContext = repositoryContext;
     }
+    
     public virtual async Task<IEnumerable<T>> FindAll(bool trackChanges, CancellationToken cancellationToken) =>
         await (!trackChanges ?
             _repositoryContext.Set<T>()
