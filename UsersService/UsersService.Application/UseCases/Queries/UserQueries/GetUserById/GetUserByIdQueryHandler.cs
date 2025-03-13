@@ -12,6 +12,7 @@ public class GetUserByIdQueryHandler(
     public async Task<User> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
         var user = await userManager.FindByIdAsync(request.UserId);
+        
         if (user == null)
         {
             throw new NotFoundException("User not found");

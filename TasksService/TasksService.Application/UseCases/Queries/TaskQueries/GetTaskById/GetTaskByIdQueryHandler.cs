@@ -17,11 +17,15 @@ public class GetTaskByIdQueryHandler(
     {
         string cacheKey = $"task:{request.TaskId}";
         var cachedTask = await cache.GetAsync<TaskDto>(cacheKey);
-        if (cachedTask != null) 
+        if (cachedTask != null)
+        {
             return cachedTask;
-        
+        }
+
         Guid taskId = request.TaskId;
+        
         var task = await repository.Task.GetTaskByIdAsync(taskId, trackChanges: false, cancellationToken);
+        
         if (task == null)
         {
             throw new NotFoundException($"Task with id {taskId} not found.");

@@ -13,9 +13,9 @@ public class GetAllTasksQueryHandler(
     IRedisCacheService cache)
     : IRequestHandler<GetAllTasksQuery, IEnumerable<TaskDto>>
 {
-    public async Task<IEnumerable<TaskDto>> Handle(GetAllTasksQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<TaskDto>> Handle(GetAllTasksQuery query, CancellationToken cancellationToken)
     {
-        var userId = Guid.Parse(request.UserId.Value);
+        var userId = Guid.Parse(query.UserId.Value);
         string cacheKey = $"tasks:user:{userId}";
           
         var cachedTasks = await cache.GetAsync<IEnumerable<TaskDto>>(cacheKey);

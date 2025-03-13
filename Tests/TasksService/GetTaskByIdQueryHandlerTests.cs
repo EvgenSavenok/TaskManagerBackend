@@ -152,7 +152,7 @@ public class GetTaskByIdQueryHandlerTests
         var query = new GetTaskByIdQuery(taskId);
 
         // Act & Assert
-        await Assert.ThrowsAsync<NotFoundException>(() => 
-            _handlerTests.Handle(query, CancellationToken.None));
+        await _handlerTests.Invoking(h => h.Handle(query, CancellationToken.None))
+            .Should().ThrowAsync<NotFoundException>();
     }
 }
