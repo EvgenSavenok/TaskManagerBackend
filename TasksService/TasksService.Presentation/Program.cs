@@ -1,6 +1,7 @@
 using MediatR;
 using TasksService.Infrastructure.Extensions;
 using TasksService.Infrastructure.Grpc;
+using TasksService.Presentation.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ builder.Services.ConfigureRedis(builder.Configuration);
 builder.Services.AddMessageBrokerServices();
 builder.Services.AddGrpcServices();
 
+builder.Services.AddSignalR();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
@@ -43,5 +45,7 @@ app.MapControllers();
 app.MapRazorPages();
 
 app.MapGrpcService<GrpcUserService>();
+
+app.MapHub<TaskHub>("/taskHub").AllowAnonymous();
 
 app.Run();

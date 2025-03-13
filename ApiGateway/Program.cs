@@ -10,9 +10,12 @@ builder.Services.AddOcelot();
 
 var app = builder.Build();
 
-app.UseCors("UsersPolicy");
-app.UseCors("TasksPolicy");
-app.UseCors("NotificationsPolicy");
+// app.UseCors("UsersPolicy");
+// app.UseCors("TasksPolicy");
+//app.UseCors("NotificationsPolicy");
+app.UseCors("SignalRPolicy");
+
+app.UseRouting();
 
 app.UseOcelot().Wait();
 
