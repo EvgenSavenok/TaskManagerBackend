@@ -1,23 +1,18 @@
 ﻿using System.Linq.Expressions;
 using Application.Contracts.RepositoryContracts;
+using Application.Contracts.Specification;
 using Microsoft.EntityFrameworkCore;
 
 namespace TasksService.Infrastructure.Repositories;
 
-public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
+public abstract class RepositoryBase<T>(ApplicationContext repositoryContext) : IRepositoryBase<T>
+    where T : class
 {
-    private readonly ApplicationContext _repositoryContext;
-
-    protected RepositoryBase(ApplicationContext repositoryContext)
-    {
-        _repositoryContext = repositoryContext;
-    }
-    
     public virtual async Task<IEnumerable<T>> FindAll(bool trackChanges, CancellationToken cancellationToken) =>
         await (!trackChanges ?
-            _repositoryContext.Set<T>()
+            repositoryContext.Set<T>()
                 .AsNoTracking() :
-            _repositoryContext.Set<T>()).ToListAsync(cancellationToken: cancellationToken);
+            repositoryContext.Set<T>()).ToListAsync(cancellationToken: cancellationToken);
     
     public async Task<IEnumerable<T>> FindByCondition(
         Expression<Func<T, bool>> expression,
@@ -25,7 +20,7 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
         CancellationToken cancellationToken,
         params Expression<Func<T, object>>[] includes)
     {
-        IQueryable<T> query = _repositoryContext.Set<T>();
+        IQueryable<T> query = repositoryContext.Set<T>();
 
         if (!trackChanges)
             query = query.AsNoTracking();
@@ -42,23 +37,46 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
         
         return await query.ToListAsync(cancellationToken);
     }
-
     
     public async Task Create(T entity, CancellationToken cancellationToken = default)
     {
-        await _repositoryContext.Set<T>().AddAsync(entity, cancellationToken); 
-        await _repositoryContext.SaveChangesAsync(cancellationToken);
+        await repositoryContext.Set<T>().AddAsync(entity, cancellationToken); 
+        await repositoryContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task Update(T entity, CancellationToken cancellationToken = default)
     {
-        _repositoryContext.Set<T>().Update(entity); 
-        await _repositoryContext.SaveChangesAsync(cancellationToken);
+        repositoryContext.Set<T>().Update(entity); 
+        await repositoryContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task Delete(T entity, CancellationToken cancellationToken = default)
     {
-        _repositoryContext.Set<T>().Remove(entity);
-        await _repositoryContext.SaveChangesAsync(cancellationToken);
+        repositoryContext.Set<T>().Remove(entity);
+        await repositoryContext.SaveChangesAsync(cancellationToken);
+    }
+    
+    public async Task<IEnumerable<T>> GetBySpecificationAsync(ISpecification<T> specification, bool trackChanges,
+        CancellationToken cancellationToken)
+    {
+        IQueryable<T> query = repositoryContext.Set<T>();
+
+        if (specification.Criteria != null)
+            query = query.Where(specification.Criteria);
+        
+        if (!trackChanges)
+            query = query.AsNoTracking();
+
+        if (specification.OrderBy != null)
+            query = specification.OrderBy(query);
+
+        if (specification.Includes != null)
+            query = specification.Includes(query);
+
+        query = query
+            .Skip((specification.PageNumber - 1) * specification.PageSize)
+            .Take(specification.PageSize);
+
+        return await query.ToListAsync(cancellationToken);
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Application.Contracts.RepositoryContracts;
+using Application.RequestFeatures;
+using Application.Specifications;
 using Microsoft.EntityFrameworkCore;
 using TasksService.Domain.Models;
 
@@ -20,17 +22,7 @@ public class TasksRepository(ApplicationContext repositoryContext)
     
     public override async Task<IEnumerable<CustomTask>> FindAll(bool trackChanges, CancellationToken cancellationToken)
     {
-        var query = repositoryContext.Tasks.AsQueryable();
-
-        if (!trackChanges)
-        {
-            query = query.AsNoTracking();
-        }
-
-        query = query
-            .Include(t => t.TaskTags)    
-            .Include(t => t.TaskComments); 
-
-        return await query.ToListAsync(cancellationToken);
+        var specification = new TaskSpecification(new TaskParameters());
+        return await GetBySpecificationAsync(specification, trackChanges, cancellationToken);
     }
 }
