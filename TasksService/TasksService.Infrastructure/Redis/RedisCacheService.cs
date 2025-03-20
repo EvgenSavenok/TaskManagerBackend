@@ -26,4 +26,9 @@ public class RedisCacheService : IRedisCacheService
         
         return jsonData.HasValue ? JsonSerializer.Deserialize<T>(jsonData!) : default;
     }
+
+    public async Task<bool> RemoveAsync(string key)
+    {
+        return await _cache.KeyDeleteAsync(key);
+    }
 }

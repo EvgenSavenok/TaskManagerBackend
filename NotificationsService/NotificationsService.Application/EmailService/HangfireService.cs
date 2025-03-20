@@ -22,16 +22,7 @@ public class HangfireService(
             () => SendNotificationEmail(notification.Id, cancellationToken), delay);
         return jobId;
     }
-
-    /// <summary>
-    /// 
-    /// TODO
-    /// Need to get real user email from the broker
-    /// 
-    /// Questions
-    /// Is it okay to use mediator in the Application?
-    /// 
-    /// </summary>
+    
     public async Task SendNotificationEmail(Guid notificationId, CancellationToken cancellationToken)
     {
         var query = new GetNotificationQuery

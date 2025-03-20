@@ -1,5 +1,6 @@
 ﻿using Application.Contracts.Grpc;
 using Application.Contracts.MessagingContracts;
+using Application.Contracts.Redis;
 using Application.Contracts.RepositoryContracts;
 using Application.DataTransferObjects.TasksDto;
 using AutoMapper;
@@ -14,7 +15,8 @@ public class CreateTaskCommandHandler(
     IMapper mapper,
     IValidator<CustomTask> validator,
     ITaskCreatedProducer taskCreatedProducer,
-    IUserGrpcService userGrpcService)
+    IUserGrpcService userGrpcService,
+    IRedisCacheService cache)
     : IRequestHandler<CreateTaskCommand>
 {
     public async Task<Unit> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
@@ -44,6 +46,9 @@ public class CreateTaskCommandHandler(
         taskEventDto.UserEmail = userEmail;
         
         taskCreatedProducer.PublishTaskCreatedEvent(taskEventDto);
+        
+        string cacheKey = $"tasks:user:{taskEntity.UserId}";
+        await cache.RemoveAsync(cacheKey);
         
         return Unit.Value; 
     }

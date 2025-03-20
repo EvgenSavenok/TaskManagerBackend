@@ -5,7 +5,9 @@ namespace Application.Contracts.RepositoryContracts;
 
 public interface IRepositoryBase<T>
 {
-    public Task<IEnumerable<T>> FindAll(bool trackChanges, CancellationToken cancellationToken);
+    public Task<IEnumerable<T>> FindAll(
+        bool trackChanges, 
+        CancellationToken cancellationToken);
     
     public Task<IEnumerable<T>> FindByCondition(
         Expression<Func<T, bool>> expression,

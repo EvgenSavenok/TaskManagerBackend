@@ -76,11 +76,13 @@ public class TasksRepositoryTests : IDisposable
     public async Task FindAll_ReturnsAllTasks()
     {
         // Arrange
+        var userId = Guid.NewGuid();
+        
         await _context.Tasks.AddRangeAsync(
             new CustomTask
             {
                 Id = Guid.NewGuid(), 
-                UserId = Guid.NewGuid(),
+                UserId = userId,
                 Title = "Title",
                 Description = "Description",
                 Category = Category.Work,
@@ -91,7 +93,7 @@ public class TasksRepositoryTests : IDisposable
             new CustomTask
             {
                 Id = Guid.NewGuid(),
-                UserId = Guid.NewGuid(),
+                UserId = userId,
                 Title = "Title",
                 Description = "Description",
                 Category = Category.Work,
@@ -103,9 +105,10 @@ public class TasksRepositoryTests : IDisposable
         await _context.SaveChangesAsync();
 
         // Act
-        var result = await _repository.FindAll(
+        var result = await _repository.GetAllTasks(
             trackChanges: false, 
-            CancellationToken.None);
+            CancellationToken.None,
+            userId);
 
         // Assert
         result.Should().HaveCount(2);

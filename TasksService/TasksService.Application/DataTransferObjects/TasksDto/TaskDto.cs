@@ -9,7 +9,7 @@ public record TaskDto
 {
     public Guid TaskId { get; set; }
     
-    public string UserId { get; set; }
+    public string? UserId { get; set; }
     
     public string Title { get; set; } 
     public string Description { get; set; }
@@ -19,9 +19,9 @@ public record TaskDto
     
     public int MinutesBeforeDeadline { get; set; }
     
-    public string UserTimeZone { get; set; }
+    public string? UserTimeZone { get; set; }
     
-    public string UserEmail { get; set; }
+    public string? UserEmail { get; set; }
     
     public List<TagDto> TaskTags { get; set; } = new();
     public List<CommentDto> TaskComments { get; set; } = new ();

@@ -22,9 +22,10 @@ public class GetAllTasksQueryHandler(
         if (cachedTasks != null) 
             return cachedTasks;
         
-        var tasks = await repository.Task.FindAll(
+        var tasks = await repository.Task.GetAllTasks(
             trackChanges: false,
-            cancellationToken);
+            cancellationToken,
+            userId);
         
         var taskDtos = mapper.Map<IEnumerable<TaskDto>>(tasks);
         

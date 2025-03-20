@@ -1,4 +1,5 @@
 ﻿using Application.Contracts.MessagingContracts;
+using Application.Contracts.Redis;
 using Application.Contracts.RepositoryContracts;
 using Application.DataTransferObjects.TasksDto;
 using AutoMapper;
@@ -13,7 +14,8 @@ public class UpdateTaskCommandHandler(
     IRepositoryManager repository,
     IMapper mapper,
     IValidator<CustomTask> validator,
-    ITaskUpdatedProducer taskUpdatedProducer)
+    ITaskUpdatedProducer taskUpdatedProducer,
+    IRedisCacheService cache)
     : IRequestHandler<UpdateTaskCommand>
 {
     public async Task<Unit> Handle(UpdateTaskCommand request, CancellationToken cancellationToken)
@@ -54,6 +56,9 @@ public class UpdateTaskCommandHandler(
         
         taskUpdatedProducer.PublishTaskUpdatedEvent(taskEventDto);
     
+        string cacheKey = $"tasks:user:{taskEntity.UserId}";
+        await cache.RemoveAsync(cacheKey);
+        
         return Unit.Value;
     }
 }

@@ -8,7 +8,9 @@ namespace TasksService.Infrastructure.Repositories;
 public abstract class RepositoryBase<T>(ApplicationContext repositoryContext) : IRepositoryBase<T>
     where T : class
 {
-    public virtual async Task<IEnumerable<T>> FindAll(bool trackChanges, CancellationToken cancellationToken) =>
+    public virtual async Task<IEnumerable<T>> FindAll(
+        bool trackChanges,
+        CancellationToken cancellationToken) =>
         await (!trackChanges ?
             repositoryContext.Set<T>()
                 .AsNoTracking() :

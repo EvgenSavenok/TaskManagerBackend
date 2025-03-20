@@ -91,7 +91,7 @@ public class AuthenticationManager(
             audience: jwtSettings.GetSection("validAudience").Value,
             claims: claims,
             expires:
-                DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("expires").Value)),
+                DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("expires").Value)),
             signingCredentials: signingCredentials
         );
         
@@ -119,16 +119,5 @@ public class AuthenticationManager(
         var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         
         return accessToken;
-    }
-    
-    public async Task Logout(string userId)
-    {
-        var user = await userManager.FindByIdAsync(userId);
-        if (user == null)
-            throw new NotFoundException("User not found.");
-
-        user.RefreshToken = null;
-        //user.RefreshTokenExpireTime = null;
-        await userManager.UpdateAsync(user);
     }
 }

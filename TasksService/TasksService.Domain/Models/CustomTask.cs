@@ -15,6 +15,7 @@ public class CustomTask
     public DateTime Deadline { get; set; }
     public Status Status { get; set; }
     public DateTime CreatedAt { get; set; }
+    public int MinutesBeforeDeadline { get; set; }
     
     [JsonIgnore]
     public ICollection<Tag> TaskTags { get; set; } = new List<Tag>();

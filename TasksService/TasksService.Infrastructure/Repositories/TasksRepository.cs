@@ -20,9 +20,12 @@ public class TasksRepository(ApplicationContext repositoryContext)
         return tasks.FirstOrDefault();
     }
     
-    public override async Task<IEnumerable<CustomTask>> FindAll(bool trackChanges, CancellationToken cancellationToken)
+    public async Task<IEnumerable<CustomTask>> GetAllTasks(
+        bool trackChanges, 
+        CancellationToken cancellationToken,
+        Guid userId)
     {
-        var specification = new TaskSpecification(new TaskParameters());
+        var specification = new TaskSpecification(new TaskParameters { UserId = userId });
         return await GetBySpecificationAsync(specification, trackChanges, cancellationToken);
     }
 }

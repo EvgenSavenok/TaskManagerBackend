@@ -17,7 +17,7 @@ public class TasksController(
     IMediator mediator) : Controller
 {
     [HttpGet("getTaskById/{id}")]
-    //[Authorize(Policy = "User")]
+    [Authorize(Policy = "User")]
     public async Task<IActionResult> GetTask(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetTaskByIdQuery(id) { TaskId = id };
@@ -58,7 +58,7 @@ public class TasksController(
     }
 
     [HttpPut("updateTask")]
-    //[Authorize(Policy = "User")]
+    [Authorize(Policy = "User")]
     public async Task<IActionResult> UpdateTask(
         [FromBody] TaskDto taskDto, 
         CancellationToken cancellationToken)
@@ -73,7 +73,7 @@ public class TasksController(
     }
 
     [HttpDelete("deleteTask/{taskId}")]
-    //[Authorize(Policy = "User")]
+    [Authorize(Policy = "User")]
     public async Task<IActionResult> DeleteTask(Guid taskId, CancellationToken cancellationToken)
     {
         var command = new DeleteTaskCommand { TaskId = taskId };

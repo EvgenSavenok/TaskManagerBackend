@@ -13,7 +13,7 @@ public class GetAllUsersQueryHandler(
         GetAllUsersQuery request, 
         CancellationToken cancellationToken)
     {
-        var users = await userManager.Users.ToListAsync(cancellationToken);
+        var users = await userManager.GetUsersInRoleAsync("User");
         
         return users;
     }
