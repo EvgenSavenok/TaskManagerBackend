@@ -24,7 +24,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
-app.UseHangfireDashboard();
+app.ConfigureExceptionHandler();
 
 app.UseSwagger();
 app.UseSwaggerUI(s =>
@@ -36,8 +36,6 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.ConfigureExceptionHandler();
 
 app.MapControllers();
 app.MapRazorPages();

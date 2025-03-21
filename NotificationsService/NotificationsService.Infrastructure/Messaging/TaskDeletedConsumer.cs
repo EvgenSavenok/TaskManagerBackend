@@ -12,6 +12,7 @@ namespace NotificationsService.Infrastructure.Messaging;
 public class TaskDeletedConsumer : BackgroundService
 {
     private readonly IModel _channel;
+    private readonly IConnection _connection;
     private readonly IServiceProvider _serviceProvider;
     private const string ExchangeName = "delete_task_exchange";
     private const string QueueName = "deleted_task_notifications_queue";
@@ -20,8 +21,8 @@ public class TaskDeletedConsumer : BackgroundService
     {
         _serviceProvider = serviceProvider;
         var factory = new ConnectionFactory { HostName = "localhost" };
-        var connection = factory.CreateConnection();
-        _channel = connection.CreateModel();
+        _connection = factory.CreateConnection();
+        _channel = _connection.CreateModel();
 
         _channel.ExchangeDeclare(exchange: ExchangeName, type: ExchangeType.Fanout);
         _channel.QueueDeclare(queue: QueueName, durable: true, exclusive: false, autoDelete: false);
@@ -36,23 +37,38 @@ public class TaskDeletedConsumer : BackgroundService
         {
             var body = eventArgs.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-            var taskId = JsonSerializer.Deserialize<Guid>(message); 
             
-            using var scope = _serviceProvider.CreateScope();
-            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+            try 
+            {
+                var taskId = JsonSerializer.Deserialize<Guid>(message); 
+                
+                using var scope = _serviceProvider.CreateScope();
+                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-            var command = new DeleteNotificationCommand
-            { 
-                Id = taskId
-            };
+                var command = new DeleteNotificationCommand
+                { 
+                    Id = taskId
+                };
 
-            await mediator.Send(command, stoppingToken);
+                await mediator.Send(command, stoppingToken);
 
-            _channel.BasicAck(eventArgs.DeliveryTag, false);
+                //_channel.BasicAck(eventArgs.DeliveryTag, false);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[RabbitMQ Error] {ex.Message}"); 
+            }
         };
 
-        _channel.BasicConsume(queue: QueueName, autoAck: false, consumer: consumer);
+        _channel.BasicConsume(queue: QueueName, autoAck: true, consumer: consumer);
 
         return Task.CompletedTask;
+    }
+    
+    public override Task StopAsync(CancellationToken cancellationToken)
+    {
+        _channel.Close();
+        _connection.Close();
+        return base.StopAsync(cancellationToken);
     }
 }

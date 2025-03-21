@@ -22,7 +22,7 @@ public class DeleteNotificationCommandHandler(
 
         if (notification is null)
         {
-            throw new NotFoundException($"Уведомление с ID {taskId} не найдено.");
+            return Unit.Value;
         }
         
         hangfireService.DeleteNotificationInHangfire(notification.HangfireJobId);

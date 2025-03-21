@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using Hangfire;
 using MediatR;
 using NotificationsService.Application.Contracts.RepositoryContracts;
 using NotificationsService.Application.Contracts.ServicesContracts;
+using NotificationsService.Application.UseCases.Commands.NotificationCommands.CreateNotification;
 using NotificationsService.Domain.CustomExceptions;
 using NotificationsService.Domain.Models;
 
@@ -13,13 +13,12 @@ public class UpdateNotificationCommandHandler(
     IRepositoryManager repository,
     IValidator<Notification> validator,
     IMapper mapper,
-    IHangfireService hangfireService) 
+    IHangfireService hangfireService,
+    IMediator mediator) 
     : IRequestHandler<UpdateNotificationCommand>
 {
     public async Task<Unit> Handle(UpdateNotificationCommand request, CancellationToken cancellationToken)
     {
-        var notificationDto = request.NotificationDto;
-
         var taskId = request.NotificationDto.TaskId.ToString();
         var notifications = await repository.Notification.FindByCondition(
             c => c.TaskId.ToString() == taskId, cancellationToken);
@@ -27,7 +26,8 @@ public class UpdateNotificationCommandHandler(
 
         if (notificationEntity == null)
         {
-            throw new NotFoundException($"Notification with task id {notificationDto.TaskId} not found");
+            await mediator.Send(new CreateNotificationCommand { NotificationDto = request.NotificationDto }, cancellationToken);
+            return Unit.Value;
         }
 
         DateTime oldDeadline = notificationEntity.Deadline;

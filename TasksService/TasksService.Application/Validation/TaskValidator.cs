@@ -13,7 +13,8 @@ public class TaskValidator : AbstractValidator<CustomTask>
             .MaximumLength(1000).WithMessage("Description must not exceed 100 characters");
 
         RuleFor(task => task.Deadline)
-            .NotEmpty().WithMessage("Deadline is required.");
+            .NotEmpty().WithMessage("Deadline is required.")
+            .GreaterThan(task => task.CreatedAt).WithMessage("Deadline must be later than the creation date.");
         
         RuleFor(task => task.Category)
             .NotEmpty().WithMessage("Category is required.");

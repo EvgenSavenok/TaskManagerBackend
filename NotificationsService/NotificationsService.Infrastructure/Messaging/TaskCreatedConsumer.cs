@@ -15,6 +15,7 @@ namespace NotificationsService.Infrastructure.Messaging;
 public class TaskCreatedConsumer : BackgroundService
 {
     private readonly IModel _channel;
+    private readonly IConnection _connection;
     private readonly IServiceProvider _serviceProvider;
     private const string ExchangeName = "create_task_exchange";
     private const string QueueName = "created_task_notifications_queue";
@@ -23,8 +24,8 @@ public class TaskCreatedConsumer : BackgroundService
     {
         _serviceProvider = serviceProvider;
         var factory = new ConnectionFactory { HostName = "localhost" };
-        var connection = factory.CreateConnection();
-        _channel = connection.CreateModel();
+        _connection = factory.CreateConnection(); 
+        _channel = _connection.CreateModel();
 
         _channel.ExchangeDeclare(exchange: ExchangeName, type: ExchangeType.Fanout);
         _channel.QueueDeclare(queue: QueueName, durable: true, exclusive: false, autoDelete: false);
@@ -38,26 +39,42 @@ public class TaskCreatedConsumer : BackgroundService
         {
             var body = eventArgs.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-            var taskCreatedEvent = JsonSerializer.Deserialize<CreateTaskEventDto>(message);
-
-            using var scope = _serviceProvider.CreateScope();
-            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-            var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
-
-            var notificationDto = mapper.Map<NotificationDto>(taskCreatedEvent);
-        
-            var command = new CreateNotificationCommand
+            
+            try
             {
-                NotificationDto = notificationDto
-            };
+                var taskCreatedEvent = JsonSerializer.Deserialize<CreateTaskEventDto>(message);
 
-            await mediator.Send(command, stoppingToken);
+                using var scope = _serviceProvider.CreateScope();
+                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
 
-            _channel.BasicAck(eventArgs.DeliveryTag, false);
+                var notificationDto = mapper.Map<NotificationDto>(taskCreatedEvent);
+            
+                var command = new CreateNotificationCommand
+                {
+                    NotificationDto = notificationDto
+                };
+
+                await mediator.Send(command, stoppingToken);
+
+                //_channel.BasicAck(eventArgs.DeliveryTag, false);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[RabbitMQ Error] {ex.Message}"); 
+                _channel.BasicNack(eventArgs.DeliveryTag, false, false);
+            }
         };
 
-        _channel.BasicConsume(queue: QueueName, autoAck: false, consumer: consumer);
+        _channel.BasicConsume(queue: QueueName, autoAck: true, consumer: consumer);
 
         return Task.CompletedTask;
+    }
+    
+    public override Task StopAsync(CancellationToken cancellationToken)
+    {
+        _channel.Close();
+        _connection.Close(); 
+        return base.StopAsync(cancellationToken);
     }
 }
