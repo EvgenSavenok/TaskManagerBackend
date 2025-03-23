@@ -42,7 +42,6 @@ public class TasksRepositoryTests : IDisposable
             Category = Category.Work,
             Priority = Priority.High,
             Deadline = DateTime.UtcNow.AddDays(5),
-            Status = Status.InProgress
         };
 
         await _context.Tasks.AddAsync(task);
@@ -88,7 +87,6 @@ public class TasksRepositoryTests : IDisposable
                 Category = Category.Work,
                 Priority = Priority.High,
                 Deadline = DateTime.UtcNow.AddDays(5),
-                Status = Status.InProgress
             },
             new CustomTask
             {
@@ -99,7 +97,6 @@ public class TasksRepositoryTests : IDisposable
                 Category = Category.Work,
                 Priority = Priority.High,
                 Deadline = DateTime.UtcNow.AddDays(5),
-                Status = Status.InProgress
             }
         );
         await _context.SaveChangesAsync();
@@ -129,7 +126,6 @@ public class TasksRepositoryTests : IDisposable
             Category = Category.Work,
             Priority = Priority.High,
             Deadline = deadline,
-            Status = Status.InProgress,
             TaskTags = new List<Tag>
             {
                 new() { Id = Guid.NewGuid(), Name = "Urgent" },
@@ -155,7 +151,6 @@ public class TasksRepositoryTests : IDisposable
         result.Category.Should().Be(Category.Work);
         result.Priority.Should().Be(Priority.High);
         result.Deadline.Should().Be(deadline);
-        result.Status.Should().Be(Status.InProgress);
         
         result.TaskTags.Should().NotBeNull();
         result.TaskTags.Should().HaveCount(2);
@@ -182,7 +177,6 @@ public class TasksRepositoryTests : IDisposable
             Category = Category.Work,
             Priority = Priority.High,
             Deadline = deadline,
-            Status = Status.InProgress,
             TaskTags = new List<Tag>
             {
                 new() { Id = Guid.NewGuid(), Name = "Urgent" },
@@ -242,7 +236,6 @@ public class TasksRepositoryTests : IDisposable
             Category = Category.Work,
             Priority = Priority.High,
             Deadline = deadline,
-            Status = Status.InProgress,
             TaskTags = new List<Tag>
             {
                 new() { Id = Guid.NewGuid(), Name = "Urgent" },

@@ -32,7 +32,7 @@ public class TaskCreatedConsumer : BackgroundService
         _channel.QueueBind(queue: QueueName, exchange: ExchangeName, routingKey: "");
     }
 
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override Task ExecuteAsync(CancellationToken cancellationToken)
     {
         var consumer = new EventingBasicConsumer(_channel);
         consumer.Received += async (_, eventArgs) =>
@@ -55,7 +55,7 @@ public class TaskCreatedConsumer : BackgroundService
                     NotificationDto = notificationDto
                 };
 
-                await mediator.Send(command, stoppingToken);
+                await mediator.Send(command, cancellationToken);
 
                 //_channel.BasicAck(eventArgs.DeliveryTag, false);
             }

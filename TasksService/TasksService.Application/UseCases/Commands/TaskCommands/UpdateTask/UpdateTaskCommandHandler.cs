@@ -1,4 +1,5 @@
-﻿using Application.Contracts.MessagingContracts;
+﻿using Application.Contracts.Grpc;
+using Application.Contracts.MessagingContracts;
 using Application.Contracts.Redis;
 using Application.Contracts.RepositoryContracts;
 using Application.DataTransferObjects.TasksDto;
@@ -15,6 +16,7 @@ public class UpdateTaskCommandHandler(
     IMapper mapper,
     IValidator<CustomTask> validator,
     ITaskUpdatedProducer taskUpdatedProducer,
+    IUserGrpcService userGrpcService,
     IRedisCacheService cache)
     : IRequestHandler<UpdateTaskCommand>
 {
@@ -50,9 +52,12 @@ public class UpdateTaskCommandHandler(
         taskEntity.TaskTags = tagsToAdd;
         
         await repository.Task.Update(taskEntity, cancellationToken);
-        
+
         var taskEventDto = new UpdateTaskEventDto();
         mapper.Map(request.TaskDto, taskEventDto);
+        
+        var userEmail = await userGrpcService.GetUserEmailAsync(request.TaskDto.UserId);
+        taskEventDto.UserEmail = userEmail;
         
         taskUpdatedProducer.PublishTaskUpdatedEvent(taskEventDto);
     

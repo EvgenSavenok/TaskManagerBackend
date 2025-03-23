@@ -10,7 +10,7 @@ public class RedisCacheService : IRedisCacheService
     
     public RedisCacheService(string connectionString)
     {
-        var redis = ConnectionMultiplexer.Connect("localhost:6379,abortConnect=false");
+        var redis = ConnectionMultiplexer.Connect(connectionString);
         _cache = redis.GetDatabase();
     }
 
