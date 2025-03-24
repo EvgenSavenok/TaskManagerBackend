@@ -18,6 +18,7 @@ public class NotificationsRepository(IMongoDatabase database)
             .Set(n => n.MinutesBeforeDeadline, notification.MinutesBeforeDeadline)
             .Set(n => n.UserEmail, notification.UserEmail)
             .Set(n => n.UserTimeZone, notification.UserTimeZone)
+            .Set(n => n.Status, notification.Status)
             .Set(n => n.HangfireJobId, notification.HangfireJobId);
 
         await _collection.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);

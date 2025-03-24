@@ -56,13 +56,10 @@ public class TaskCreatedConsumer : BackgroundService
                 };
 
                 await mediator.Send(command, cancellationToken);
-
-                //_channel.BasicAck(eventArgs.DeliveryTag, false);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"[RabbitMQ Error] {ex.Message}"); 
-                _channel.BasicNack(eventArgs.DeliveryTag, false, false);
             }
         };
 

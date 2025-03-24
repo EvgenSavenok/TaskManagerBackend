@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using NotificationsService.Domain.Enums;
 
 namespace NotificationsService.Domain.Models;
 
@@ -28,4 +29,6 @@ public class Notification
     public string UserTimeZone { get; set; }
     
     public string HangfireJobId { get; set; }
+    
+    public Status Status { get; set; }
 }

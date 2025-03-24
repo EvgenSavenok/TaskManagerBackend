@@ -25,7 +25,7 @@ public class CreateNotificationCommandHandler(
             throw new ValidationException(validationResult.Errors.ToString());
         }
         
-        notificationEntity.Deadline = DateTime.SpecifyKind(notificationEntity.Deadline, DateTimeKind.Local);
+        notificationEntity.Deadline = DateTime.SpecifyKind(notificationEntity.Deadline, DateTimeKind.Utc);
         notificationEntity.Deadline = TimeZoneInfo.ConvertTimeToUtc(notificationEntity.Deadline);
         
         var jobId = hangfireService.ScheduleNotificationInHangfire(notificationEntity, cancellationToken);

@@ -1,4 +1,6 @@
-﻿namespace NotificationsService.Application.DataTransferObjects.NotificationsDto;
+﻿using NotificationsService.Domain.Enums;
+
+namespace NotificationsService.Application.DataTransferObjects.NotificationsDto;
 
 public record NotificationDto
 {
@@ -8,6 +10,8 @@ public record NotificationDto
     
     public string Title { get; set; } 
     
+    public DateTime CreatedAt { get; set; } 
+    
     public DateTime Deadline { get; set; }
     
     public int MinutesBeforeDeadline { get; set; }
@@ -15,4 +19,6 @@ public record NotificationDto
     public string UserTimeZone { get; set; }
     
     public string UserEmail { get; set; }
+    
+    public string? HangfireJobId { get; set; }
 }

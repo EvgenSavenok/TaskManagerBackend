@@ -51,8 +51,6 @@ public class TaskDeletedConsumer : BackgroundService
                 };
 
                 await mediator.Send(command, stoppingToken);
-
-                //_channel.BasicAck(eventArgs.DeliveryTag, false);
             }
             catch (Exception ex)
             {
