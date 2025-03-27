@@ -16,11 +16,6 @@ public class GetAllTasksQueryHandler(
     public async Task<IEnumerable<TaskDto>> Handle(GetAllTasksQuery query, CancellationToken cancellationToken)
     {
         var userId = Guid.Parse(query.UserId.Value);
-        string cacheKey = $"tasks:user:{userId}";
-          
-        var cachedTasks = await cache.GetAsync<IEnumerable<TaskDto>>(cacheKey);
-        if (cachedTasks != null) 
-            return cachedTasks;
         
         var tasks = await repository.Task.GetAllTasks(
             trackChanges: false,
@@ -28,8 +23,6 @@ public class GetAllTasksQueryHandler(
             userId);
         
         var taskDtos = mapper.Map<IEnumerable<TaskDto>>(tasks);
-        
-        await cache.SetAsync(cacheKey, taskDtos, TimeSpan.FromMinutes(10));
         
         return taskDtos;
     }

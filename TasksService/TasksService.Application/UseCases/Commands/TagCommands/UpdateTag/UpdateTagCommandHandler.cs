@@ -1,4 +1,5 @@
-﻿using Application.Contracts.RepositoryContracts;
+﻿using Application.Contracts.Redis;
+using Application.Contracts.RepositoryContracts;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
@@ -10,6 +11,7 @@ namespace Application.UseCases.Commands.TagCommands.UpdateTag;
 public class UpdateTagCommandHandler(
     IRepositoryManager repository,
     IMapper mapper,
+    IRedisCacheService cache,
     IValidator<Tag> validator)
     : IRequestHandler<UpdateTagCommand>
 {
@@ -35,6 +37,9 @@ public class UpdateTagCommandHandler(
         }
 
         await repository.Tag.Update(tagEntity, cancellationToken);
+        
+        string cacheKey = "tags: all";
+        await cache.RemoveAsync(cacheKey);
         
         return Unit.Value;
     }

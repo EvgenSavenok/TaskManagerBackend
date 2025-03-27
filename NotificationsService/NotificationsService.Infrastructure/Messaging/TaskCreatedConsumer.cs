@@ -54,7 +54,6 @@ public class TaskCreatedConsumer : BackgroundService
                 {
                     NotificationDto = notificationDto
                 };
-
                 await mediator.Send(command, cancellationToken);
             }
             catch (Exception ex)

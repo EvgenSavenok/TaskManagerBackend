@@ -16,7 +16,7 @@ public class GetTagByIdQueryHandler(
     public async Task<TagDto> Handle(GetTagByIdQuery request, CancellationToken cancellationToken)
     {
         Guid tagId = request.TagId;
-        string cacheKey = $"tag:{tagId}";
+        string cacheKey = $"tag: {tagId}";
         
         var cachedTag = await cache.GetAsync<TagDto>(cacheKey);
         if (cachedTag != null) 

@@ -54,7 +54,6 @@ public class TaskUpdatedConsumer : BackgroundService
                 {
                     NotificationDto = notificationDto
                 };
-
                 await mediator.Send(command, stoppingToken);
             }
             catch (Exception ex)

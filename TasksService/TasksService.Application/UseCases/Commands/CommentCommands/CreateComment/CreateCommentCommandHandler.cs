@@ -1,4 +1,6 @@
-﻿using Application.Contracts.RepositoryContracts;
+﻿using Application.Contracts.Redis;
+using Application.Contracts.RepositoryContracts;
+using Application.DataTransferObjects.CommentsDto;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
@@ -10,10 +12,11 @@ namespace Application.UseCases.Commands.CommentCommands.CreateComment;
 public class CreateCommentCommandHandler(
     IRepositoryManager repository,
     IMapper mapper,
+    IRedisCacheService cache,
     IValidator<Comment> validator)
-    : IRequestHandler<CreateCommentCommand>
+    : IRequestHandler<CreateCommentCommand, CommentDto>
 {
-    public async Task<Unit> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
+    public async Task<CommentDto> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
     {
         var commentEntity = mapper.Map<Comment>(request);
         var validationResult = await validator.ValidateAsync(commentEntity, cancellationToken);
@@ -34,7 +37,10 @@ public class CreateCommentCommandHandler(
         commentEntity.TaskId = taskEntity.Id;
         
         await repository.Comment.Create(commentEntity, cancellationToken);
+        
+        string cacheKey = $"comments: {commentEntity.TaskId}";
+        await cache.RemoveAsync(cacheKey);
 
-        return Unit.Value;
+        return mapper.Map<CommentDto>(commentEntity);
     }
 }

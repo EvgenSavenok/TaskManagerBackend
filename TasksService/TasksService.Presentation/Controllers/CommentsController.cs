@@ -26,6 +26,7 @@ public class CommentsController(
             CommentId = commentId
         };
         var comment = await mediator.Send(query, cancellationToken);
+        
         return Ok(comment);
     }
     
@@ -40,6 +41,7 @@ public class CommentsController(
             TaskId = taskId
         };
         var tags = await mediator.Send(query, cancellationToken);
+        
         return Ok(tags);
     }
     
@@ -54,8 +56,9 @@ public class CommentsController(
             TaskId = commentDto.TaskId,
             Content = commentDto.Content
         };
-        await mediator.Send(command, cancellationToken);
-        return NoContent();
+        commentDto = await mediator.Send(command, cancellationToken);
+        
+        return Ok(commentDto);
     }
     
     [HttpPut("updateComment")]
@@ -70,6 +73,7 @@ public class CommentsController(
             Content = commentDto.Content
         };
         await mediator.Send(command, cancellationToken);
+        
         return NoContent();
     }
     
@@ -81,9 +85,10 @@ public class CommentsController(
     {
         var command = new DeleteCommentCommand
         {
-            CommentId = commentId
+            CommentId = commentId,
         };
         await mediator.Send(command, cancellationToken);
+        
         return NoContent();
     }
 }

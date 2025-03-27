@@ -18,7 +18,6 @@ public class CreateTaskCommandHandlerTests
     private readonly CreateTaskCommandHandler _handlerTests;
     private readonly Mock<ITaskCreatedProducer> _taskCreatedProducerMock;
     private readonly Mock<IUserGrpcService> _userGrpcMock;
-    private readonly Mock<IRedisCacheService> _cacheMock;
     
     public CreateTaskCommandHandlerTests()
     {
@@ -27,15 +26,13 @@ public class CreateTaskCommandHandlerTests
         _validatorMock = new Mock<IValidator<CustomTask>>();
         _taskCreatedProducerMock = new Mock<ITaskCreatedProducer>();
         _userGrpcMock = new Mock<IUserGrpcService>();
-        _cacheMock = new Mock<IRedisCacheService>();
 
         _handlerTests = new CreateTaskCommandHandler(
             _repositoryMock.Object,
             _mapperMock.Object,
             _validatorMock.Object,
             _taskCreatedProducerMock.Object,
-            _userGrpcMock.Object,
-            _cacheMock.Object
+            _userGrpcMock.Object
         );
     }
 }

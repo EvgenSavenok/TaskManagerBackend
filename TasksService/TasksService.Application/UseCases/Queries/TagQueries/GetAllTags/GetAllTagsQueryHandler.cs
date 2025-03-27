@@ -14,7 +14,7 @@ public class GetAllTagsQueryHandler(
 {
     public async Task<IEnumerable<TagDto>> Handle(GetAllTagsQuery request, CancellationToken cancellationToken)
     {
-        string cacheKey = "tags:all";
+        string cacheKey = "tags: all";
         
         var cachedTags = await cache.GetAsync<IEnumerable<TagDto>>(cacheKey);
         if (cachedTags != null) 

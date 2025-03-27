@@ -32,14 +32,14 @@ public class UpdateNotificationCommandHandler(
             throw new ValidationException(validationResult.Errors.ToString());
         }
         
-        notificationEntity.Status = Status.Unsent; 
-        
         if (!oldDeadline.Equals(notificationEntity.Deadline))
         {
             notificationEntity.Deadline = DateTime.SpecifyKind(notificationEntity.Deadline, DateTimeKind.Utc);
             notificationEntity.Deadline = TimeZoneInfo.ConvertTimeToUtc(notificationEntity.Deadline);
 
             hangfireService.ScheduleNotificationInHangfire(notificationEntity, cancellationToken);
+        
+            notificationEntity.Status = Status.Unsent; 
         }
         
         await repository.Notification.UpdateNotificationByTaskId(notificationEntity, cancellationToken);

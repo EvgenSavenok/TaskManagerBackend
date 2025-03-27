@@ -16,7 +16,7 @@ public class GetAllTagsOfTaskQueryHandler(
     {
         var taskId = request.TaskId;
         
-        var cacheKey = $"tags:{taskId}";
+        var cacheKey = $"tags: {taskId}";
         
         var cachedTags = await cache.GetAsync<IEnumerable<TagDto>>(cacheKey);
         if (cachedTags != null)

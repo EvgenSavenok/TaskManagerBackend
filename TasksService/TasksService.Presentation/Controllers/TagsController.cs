@@ -27,6 +27,7 @@ public class TagsController(
             TagId = tagId
         };
         var tag = await mediator.Send(query, cancellationToken);
+        
         return Ok(tag);
     }
     
@@ -39,6 +40,7 @@ public class TagsController(
             TaskId = taskId,
         };
         var taskTags = await mediator.Send(query, cancellationToken);
+        
         return Ok(taskTags);
     }
 
@@ -48,6 +50,7 @@ public class TagsController(
     {
         var query = new GetAllTagsQuery();
         var tags = await mediator.Send(query, cancellationToken);
+        
         return Ok(tags);
     }
     
@@ -62,6 +65,7 @@ public class TagsController(
             TagName = tagDto.TagName
         };
         await mediator.Send(command, cancellationToken);
+        
         return NoContent();
     }
     
@@ -78,6 +82,7 @@ public class TagsController(
             TagName = tagDto.TagName
         };
         await mediator.Send(command, cancellationToken);
+        
         return NoContent();
     }
     
@@ -92,6 +97,7 @@ public class TagsController(
             TagId = tagId
         };
         await mediator.Send(command, cancellationToken);
+        
         return NoContent();
     }
 }

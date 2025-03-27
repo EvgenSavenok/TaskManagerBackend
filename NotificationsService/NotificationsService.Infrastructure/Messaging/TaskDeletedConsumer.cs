@@ -49,7 +49,6 @@ public class TaskDeletedConsumer : BackgroundService
                 { 
                     Id = taskId
                 };
-
                 await mediator.Send(command, stoppingToken);
             }
             catch (Exception ex)
