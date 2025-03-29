@@ -14,6 +14,19 @@
       "CorsPolicy": "UsersPolicy"
     },
     {
+      "DownstreamPathTemplate": "/api/token/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5151
+        }
+      ],
+      "UpstreamPathTemplate": "/token/{everything}",
+      "UpstreamHttpMethod": [ "POST", "GET", "PUT", "DELETE", "OPTIONS" ],
+      "CorsPolicy": "UsersPolicy"
+    },
+    {
       "DownstreamPathTemplate": "/api/tags/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

@@ -41,11 +41,12 @@ public class UsersController(IMediator mediator) : Controller
     {
         var command = new AuthenticateUserCommand
         {
-            UserForAuthenticationDto = userForLogin
+            UserForAuthenticationDto = userForLogin,
+            HttpContext = HttpContext
         };
-        var (accessToken, refreshToken) = await mediator.Send(command);
+        var accessToken = await mediator.Send(command);
          
-        return Ok(new { AccessToken = accessToken, RefreshToken = refreshToken });
+        return Ok(new { AccessToken = accessToken });
     }
 
     [HttpDelete("deleteUser/{userId}")]

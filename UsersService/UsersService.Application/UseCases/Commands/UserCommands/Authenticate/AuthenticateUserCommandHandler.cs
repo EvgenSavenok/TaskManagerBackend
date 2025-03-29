@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using UsersService.Application.Contracts;
 using UsersService.Domain;
@@ -9,9 +10,9 @@ namespace UsersService.Application.UseCases.Commands.UserCommands.Authenticate;
 public class AuthenticateUserCommandHandler(
     UserManager<User> userManager,
     IAuthenticationManager authManager)
-    : IRequestHandler<AuthenticateUserCommand, (string AccessToken, string RefreshToken)>
+    : IRequestHandler<AuthenticateUserCommand, string>
 {
-    public async Task<(string AccessToken, string RefreshToken)> Handle(
+    public async Task<string> Handle(
         AuthenticateUserCommand request,
         CancellationToken cancellationToken)
     {
@@ -31,6 +32,16 @@ public class AuthenticateUserCommandHandler(
             throw new UnauthorizedException("Cannot create access or refresh token");
         }
         
-        return (tokenDto.AccessToken, tokenDto.RefreshToken);
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true, 
+            SameSite = SameSiteMode.None,
+            Expires = DateTime.UtcNow.AddDays(7)
+        };
+
+        request.HttpContext.Response.Cookies.Append("refreshToken", tokenDto.RefreshToken, cookieOptions);
+        
+        return tokenDto.AccessToken;
     }
 }
