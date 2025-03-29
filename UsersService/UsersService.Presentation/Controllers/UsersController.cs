@@ -1,17 +1,21 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using UsersService.Application.DataTransferObjects;
 using UsersService.Application.UseCases.Commands.UserCommands.Authenticate;
 using UsersService.Application.UseCases.Commands.UserCommands.DeleteById;
 using UsersService.Application.UseCases.Commands.UserCommands.Register;
 using UsersService.Application.UseCases.Queries.UserQueries.GetAllUsers;
+using UsersService.Presentation.SignalRHubs;
 
 namespace UsersService.Presentation.Controllers;
 
 [Route("api/users")]
 [ApiController]
-public class UsersController(IMediator mediator) : Controller
+public class UsersController(
+    IMediator mediator,
+    IHubContext<UserHub> hubContext) : Controller
 {
     [HttpGet("getAllUsers")]
     [Authorize(Policy = "Admin")]
@@ -58,6 +62,8 @@ public class UsersController(IMediator mediator) : Controller
             UserId = userId
         };
         await mediator.Send(command);
+        
+        await hubContext.Clients.All.SendAsync("UserDeleted", userId);
         
         return Ok();
     }

@@ -4,9 +4,11 @@ using UsersService.Application.Contracts;
 using UsersService.Application.MappingProfiles;
 using UsersService.Infrastructure;
 using UsersService.Infrastructure.Extensions;
+using UsersService.Presentation.SignalRHubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSignalR();
 ServiceExtensions.ConfigureSerilog(builder);
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
@@ -14,21 +16,8 @@ builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.ConfigureIdentity();
 builder.Services.AddAuthorizationPolicy();
 builder.Services.ConfigureJwt(builder.Configuration);
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("UsersPolicy", b =>
-        b.WithOrigins("http://localhost:4200")
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials()); 
-});
-
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.Cookie.Name = "refreshToken";
-    });
+ServiceExtensions.ConfigureCors(builder);
+builder.Services.AddCookies();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAuthenticationManager, AuthenticationManager>();
@@ -39,7 +28,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
-//app.UseCors("UsersPolicy");
+app.UseCors("UsersPolicy");
 
 app.UseSwagger();
 app.UseSwaggerUI(s =>
@@ -56,5 +45,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapRazorPages();
+
+app.MapHub<UserHub>("/userHub");
 
 app.Run();

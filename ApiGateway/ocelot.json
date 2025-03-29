@@ -79,28 +79,28 @@
       "CorsPolicy": "TasksPolicy"
     },
     {
-      "DownstreamPathTemplate": "/taskHub",
+      "DownstreamPathTemplate": "/userHub",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5022
+          "Port": 5151
         }
       ],
-      "UpstreamPathTemplate": "/taskHub",
+      "UpstreamPathTemplate": "/userHub",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Options" ],
       "CorsPolicy": "SignalRPolicy"
     },
     {
-      "DownstreamPathTemplate": "/taskHub/negotiate",
+      "DownstreamPathTemplate": "/userHub/negotiate",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5022
+          "Port": 5151
         }
       ],
-      "UpstreamPathTemplate": "/taskHub/negotiate",
+      "UpstreamPathTemplate": "/userHub/negotiate",
       "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
       "CorsPolicy": "SignalRPolicy"
     }

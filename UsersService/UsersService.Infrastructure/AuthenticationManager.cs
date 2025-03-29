@@ -91,7 +91,7 @@ public class AuthenticationManager(
             audience: jwtSettings.GetSection("validAudience").Value,
             claims: claims,
             expires:
-                DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("expires").Value)),
+                DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("AccessTokenLifetime").Value)),
             signingCredentials: signingCredentials
         );
         

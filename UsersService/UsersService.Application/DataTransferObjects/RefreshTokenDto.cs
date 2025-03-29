@@ -1,6 +1,6 @@
 ﻿namespace UsersService.Application.DataTransferObjects;
 
-public record RefreshTokenRequest
+public record RefreshTokenDto
 {
     public string AccessToken { get; set; }
 }
