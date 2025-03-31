@@ -12,15 +12,20 @@ public class TokenController(
     IMediator mediator) : Controller
 {
     [HttpPost("refresh")]
-    [Authorize]
-    public async Task<IActionResult> Refresh([FromBody] TokenDto tokenDto)
+    public async Task<IActionResult> Refresh([FromBody] RefreshTokenDto dto)
     {
+        if (string.IsNullOrEmpty(dto.AccessToken))
+        {
+            return BadRequest("AccessToken is required.");
+        }
+        
         var command = new RefreshTokenCommand
         {
-            TokenDto = tokenDto
+            AccessToken = dto.AccessToken,
+            HttpContext = HttpContext
         };
-        var accessToken = await mediator.Send(command);
+        var refreshedAccessToken = await mediator.Send(command);
         
-        return Ok(accessToken);
+        return Ok(new RefreshTokenDto { AccessToken = refreshedAccessToken });
     }
 }

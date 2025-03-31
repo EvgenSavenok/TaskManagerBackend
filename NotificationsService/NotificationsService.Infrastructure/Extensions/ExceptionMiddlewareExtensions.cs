@@ -29,18 +29,22 @@ public static class ExceptionMiddlewareExtensions
                             statusCode = (int)HttpStatusCode.NotFound;
                             message = notFoundException.Message;
                             break;
+                        
                         case AlreadyExistsException conflictException:
                             statusCode = (int)HttpStatusCode.Conflict;
                             message = conflictException.Message;
                             break;
+                        
                         case UnauthorizedException unauthorizedException:
                             statusCode = (int)HttpStatusCode.Unauthorized;
                             message = unauthorizedException.Message;
                             break;
+                        
                         case BadRequestException badRequestException:
                             statusCode = (int)HttpStatusCode.BadRequest;
                             message = badRequestException.Message;
                             break;
+                        
                         default:
                             statusCode = (int)HttpStatusCode.InternalServerError;
                             message = exception.Message;

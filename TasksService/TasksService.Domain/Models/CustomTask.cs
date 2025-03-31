@@ -13,8 +13,8 @@ public class CustomTask
     public Category Category { get; set; }
     public Priority Priority { get; set; }
     public DateTime Deadline { get; set; }
-    public Status Status { get; set; }
     public DateTime CreatedAt { get; set; }
+    public int MinutesBeforeDeadline { get; set; }
     
     [JsonIgnore]
     public ICollection<Tag> TaskTags { get; set; } = new List<Tag>();

@@ -1,11 +1,14 @@
 ﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using UsersService.Domain;
 
 namespace UsersService.Infrastructure.Extensions;
@@ -92,8 +95,48 @@ public static class ServiceExtensions
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = jwtSettings["ValidIssuer"],
                     ValidAudience = jwtSettings["ValidAudience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+                    ClockSkew = TimeSpan.Zero
                 };
+            });
+    }
+
+    public static void ConfigureSerilog(WebApplicationBuilder builder)
+    {
+        builder.Host.UseSerilog((context, config) =>
+        {
+            config
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.Elasticsearch(
+                    new Serilog.Sinks.Elasticsearch.ElasticsearchSinkOptions(
+                        new Uri("http://localhost:9200"))
+                {
+                    AutoRegisterTemplate = true,
+                    IndexFormat = "microservices-logs-{0:yyyy.MM.dd}"
+                })
+                .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day);
+        });
+    }
+
+    public static void ConfigureCors(WebApplicationBuilder builder)
+    {
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("UsersPolicy", b =>
+                b.WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()); 
+        });
+    }
+
+    public static void AddCookies(this IServiceCollection services)
+    {
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.Cookie.Name = "refreshToken";
             });
     }
 }

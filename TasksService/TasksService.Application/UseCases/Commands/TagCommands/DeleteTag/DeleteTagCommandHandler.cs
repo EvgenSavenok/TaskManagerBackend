@@ -1,10 +1,13 @@
-﻿using Application.Contracts.RepositoryContracts;
+﻿using Application.Contracts.Redis;
+using Application.Contracts.RepositoryContracts;
 using MediatR;
 using TasksService.Domain.CustomExceptions;
 
 namespace Application.UseCases.Commands.TagCommands.DeleteTag;
 
-public class DeleteTagCommandHandler(IRepositoryManager repository)
+public class DeleteTagCommandHandler(
+    IRepositoryManager repository,
+    IRedisCacheService cache)
     : IRequestHandler<DeleteTagCommand>
 {
     public async Task<Unit> Handle(DeleteTagCommand request, CancellationToken cancellationToken)
@@ -21,6 +24,9 @@ public class DeleteTagCommandHandler(IRepositoryManager repository)
         }
 
         await repository.Tag.Delete(tagEntity, cancellationToken);
+        
+        string cacheKey = "tags: all";
+        await cache.RemoveAsync(cacheKey);
         
         return Unit.Value;
     }

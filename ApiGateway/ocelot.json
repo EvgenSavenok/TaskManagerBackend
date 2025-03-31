@@ -10,7 +10,21 @@
         }
       ],
       "UpstreamPathTemplate": "/users/{everything}",
-      "UpstreamHttpMethod": [ "POST", "GET", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": [ "POST", "GET", "PUT", "DELETE", "OPTIONS"],
+      "CorsPolicy": "UsersPolicy"
+    },
+    {
+      "DownstreamPathTemplate": "/api/token/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5151
+        }
+      ],
+      "UpstreamPathTemplate": "/token/{everything}",
+      "UpstreamHttpMethod": [ "POST", "GET", "PUT", "DELETE", "OPTIONS" ],
+      "CorsPolicy": "UsersPolicy"
     },
     {
       "DownstreamPathTemplate": "/api/tags/{everything}",
@@ -22,7 +36,8 @@
         }
       ],
       "UpstreamPathTemplate": "/tags/{everything}",
-      "UpstreamHttpMethod": [ "POST", "GET", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": [ "POST", "GET", "PUT", "DELETE", "OPTIONS" ],
+      "CorsPolicy": "TasksPolicy"
     },
     {
       "DownstreamPathTemplate": "/api/comments/{everything}",
@@ -34,7 +49,8 @@
         }
       ],
       "UpstreamPathTemplate": "/comments/{everything}",
-      "UpstreamHttpMethod": [ "POST", "GET", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": [ "POST", "GET", "PUT", "DELETE", "OPTIONS" ],
+      "CorsPolicy": "TasksPolicy"
     },
     {
       "DownstreamPathTemplate": "/api/notifications/{everything}",
@@ -46,7 +62,8 @@
         }
       ],
       "UpstreamPathTemplate": "/notifications/{everything}",
-      "UpstreamHttpMethod": [ "POST", "GET", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": [ "POST", "GET", "PUT", "DELETE", "OPTIONS" ],
+      "CorsPolicy": "NotificationsPolicy"
     },
     {
       "DownstreamPathTemplate": "/api/tasks/{everything}",
@@ -58,7 +75,34 @@
         }
       ],
       "UpstreamPathTemplate": "/tasks/{everything}",
-      "UpstreamHttpMethod": [ "POST", "GET", "PUT", "DELETE" ]
+      "UpstreamHttpMethod": [ "POST", "GET", "PUT", "DELETE", "OPTIONS" ],
+      "CorsPolicy": "TasksPolicy"
+    },
+    {
+      "DownstreamPathTemplate": "/userHub",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5151
+        }
+      ],
+      "UpstreamPathTemplate": "/userHub",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Options" ],
+      "CorsPolicy": "SignalRPolicy"
+    },
+    {
+      "DownstreamPathTemplate": "/userHub/negotiate",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5151
+        }
+      ],
+      "UpstreamPathTemplate": "/userHub/negotiate",
+      "UpstreamHttpMethod": [ "POST", "OPTIONS" ],
+      "CorsPolicy": "SignalRPolicy"
     }
   ],
   "GlobalConfiguration": {

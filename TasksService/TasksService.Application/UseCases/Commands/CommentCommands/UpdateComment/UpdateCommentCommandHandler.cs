@@ -1,4 +1,5 @@
-﻿using Application.Contracts.RepositoryContracts;
+﻿using Application.Contracts.Redis;
+using Application.Contracts.RepositoryContracts;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
@@ -10,6 +11,7 @@ namespace Application.UseCases.Commands.CommentCommands.UpdateComment;
 public class UpdateCommentCommandHandler(
     IRepositoryManager repository,
     IMapper mapper,
+    IRedisCacheService cache,
     IValidator<Comment> validator)
     : IRequestHandler<UpdateCommentCommand>
 {
@@ -36,6 +38,9 @@ public class UpdateCommentCommandHandler(
         }
 
         await repository.Comment.Update(commentEntity, cancellationToken);
+        
+        string cacheKey = $"comments: {commentEntity.TaskId}";
+        await cache.RemoveAsync(cacheKey);
         
         return Unit.Value;
     }

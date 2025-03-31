@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Application.DataTransferObjects.CommentsDto;
+using MediatR;
 
 namespace Application.UseCases.Commands.CommentCommands.CreateComment;
 
-public record CreateCommentCommand : IRequest<Unit>
+public record CreateCommentCommand : IRequest<CommentDto>
 {
     public Guid Id { get; set; }
     public Guid TaskId { get; set; }

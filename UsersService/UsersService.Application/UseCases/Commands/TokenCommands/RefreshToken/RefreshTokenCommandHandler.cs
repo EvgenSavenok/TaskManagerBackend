@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using UsersService.Application.Contracts;
+using UsersService.Application.DataTransferObjects;
 using UsersService.Domain;
 using UsersService.Domain.CustomExceptions;
 
@@ -42,20 +43,31 @@ public class RefreshTokenCommandHandler(
         {
             throw new SecurityTokenException("Invalid Token");
         }
+        
         return principal;
     }
     
     public async Task<string> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        var tokenDto = request.TokenDto;
+        if (!request.HttpContext.Request.Cookies.TryGetValue(
+                "refreshToken", out var refreshToken))
+        {
+            throw new UnauthorizedException("Refresh token is missing");
+        }
+
+        var tokenDto = new TokenDto(request.AccessToken, refreshToken);
+        
         var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
+        
         var user = await userManager.FindByNameAsync(principal.Identity.Name);
         if (user is null || user.RefreshToken != tokenDto.RefreshToken ||
             user.RefreshTokenExpireTime <= DateTime.UtcNow)
         {
             throw new UnauthorizedException("Invalid refresh token or this token expired.");
         }
+        
         string token = await authManager.CreateAccessToken(user);
+        
         return token;
     }
 }

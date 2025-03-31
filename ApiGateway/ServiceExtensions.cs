@@ -12,17 +12,39 @@ public static class ServiceExtensions
                 policy.AllowAnyMethod(); 
                 policy.AllowAnyHeader();    
             });
+            
             options.AddPolicy("TasksPolicy", policy =>
             {
                 policy.WithOrigins("http://localhost:5022");
                 policy.AllowAnyMethod();
                 policy.AllowAnyHeader();
             });
+            
             options.AddPolicy("NotificationsPolicy", policy =>
             {
                 policy.WithOrigins("http://localhost:5255");
                 policy.AllowAnyMethod();
                 policy.AllowAnyHeader();
+            });
+            
+            options.AddPolicy("GrpcPolicy", policy =>
+            {
+                policy.WithOrigins("http://localhost:5220");
+                policy.AllowAnyMethod();
+                policy.AllowAnyHeader();
+            });
+            
+            options.AddPolicy("SignalRPolicy", policy =>
+            {
+                policy.WithOrigins(
+                    "http://localhost:4200", 
+                    "http://localhost:5220",
+                    "http://localhost:5255",
+                    "http://localhost:5022",
+                    "http://localhost:5151");
+                policy.AllowAnyMethod();
+                policy.AllowAnyHeader();
+                policy.AllowCredentials();
             });
         });
     }

@@ -19,6 +19,8 @@ public class GetAllTagsOfTaskQueryHandler(
             trackChanges: false, 
             cancellationToken);
 
-        return mapper.Map<IEnumerable<TagDto>>(tags);
+        var tagDtos = mapper.Map<IEnumerable<TagDto>>(tags);
+        
+        return tagDtos;
     }
 }

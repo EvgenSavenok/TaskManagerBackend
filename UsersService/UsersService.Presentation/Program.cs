@@ -1,17 +1,24 @@
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using UsersService.Application.Contracts;
 using UsersService.Application.MappingProfiles;
 using UsersService.Infrastructure;
 using UsersService.Infrastructure.Extensions;
+using UsersService.Presentation.SignalRHubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSignalR();
+ServiceExtensions.ConfigureSerilog(builder);
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.ConfigureIdentity();
 builder.Services.AddAuthorizationPolicy();
 builder.Services.ConfigureJwt(builder.Configuration);
+ServiceExtensions.ConfigureCors(builder);
+builder.Services.AddCookies();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAuthenticationManager, AuthenticationManager>();
 builder.Services.AddRazorPages();
@@ -20,6 +27,8 @@ builder.Services.ConfigureSwagger();
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
+
+app.UseCors("UsersPolicy");
 
 app.UseSwagger();
 app.UseSwaggerUI(s =>
@@ -36,5 +45,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapRazorPages();
+
+app.MapHub<UserHub>("/userHub");
 
 app.Run();
