@@ -37,11 +37,21 @@ public static class ServiceExtensions
             options.AddPolicy("SignalRPolicy", policy =>
             {
                 policy.WithOrigins(
-                    "http://localhost:4200", 
-                    "http://localhost:5220",
+                    // Angular
+                    "http://localhost:4201",
+                    "http://angular-frontend:4201", 
+                    // API Gateway
+                    "http://api-gateway:5271", 
+                    // Users Service
+                    "http://localhost:5151", 
+                    "http://users-service:5151", 
+                    // Notifications Service
                     "http://localhost:5255",
-                    "http://localhost:5022",
-                    "http://localhost:5151");
+                    "http://notifications-service:5255",
+                    // Tasks Service
+                    "http://localhost:5022", 
+                    "http://tasks-service:5022" 
+                );
                 policy.AllowAnyMethod();
                 policy.AllowAnyHeader();
                 policy.AllowCredentials();
