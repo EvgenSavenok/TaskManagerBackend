@@ -1,8 +1,9 @@
-using Hangfire;
 using MediatR;
 using NotificationsService.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.UseUrls("http://0.0.0.0:5255"); 
 
 ServiceExtensions.ConfigureSerilog(builder);
 builder.Services.AddMongoDb(builder.Configuration);

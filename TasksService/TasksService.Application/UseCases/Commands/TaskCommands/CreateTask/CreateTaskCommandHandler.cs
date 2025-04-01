@@ -37,13 +37,13 @@ public class CreateTaskCommandHandler(
         taskEntity.TaskTags = existingTags;
         await repository.Task.Create(taskEntity, cancellationToken);
         
-        // var userEmail = await userGrpcService.GetUserEmailAsync(request.TaskDto.UserId);
-        //
-        // var taskEventDto = mapper.Map<CreateTaskEventDto>(request.TaskDto);
-        // taskEventDto.TaskId = taskEntity.Id;
-        // taskEventDto.UserEmail = userEmail;
+        var userEmail = await userGrpcService.GetUserEmailAsync(request.TaskDto.UserId);
+
+        var taskEventDto = mapper.Map<CreateTaskEventDto>(request.TaskDto);
+        taskEventDto.TaskId = taskEntity.Id;
+        taskEventDto.UserEmail = userEmail;
         
-        //taskCreatedProducer.PublishTaskCreatedEvent(taskEventDto);
+        taskCreatedProducer.PublishTaskCreatedEvent(taskEventDto);
         
         return Unit.Value; 
     }
