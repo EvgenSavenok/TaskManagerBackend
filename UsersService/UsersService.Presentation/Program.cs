@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using UsersService.Application.Contracts;
 using UsersService.Application.MappingProfiles;
 using UsersService.Infrastructure;
@@ -7,6 +6,8 @@ using UsersService.Infrastructure.Extensions;
 using UsersService.Presentation.SignalRHubs;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.UseUrls("http://0.0.0.0:5151"); 
 
 builder.Services.AddSignalR();
 ServiceExtensions.ConfigureSerilog(builder);
@@ -47,5 +48,7 @@ app.MapControllers();
 app.MapRazorPages();
 
 app.MapHub<UserHub>("/userHub");
+
+app.ApplyMigrations();
 
 app.Run();

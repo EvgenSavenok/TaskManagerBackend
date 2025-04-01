@@ -139,4 +139,11 @@ public static class ServiceExtensions
                 options.Cookie.Name = "refreshToken";
             });
     }
+    
+    public static void ApplyMigrations(this IApplicationBuilder app)
+    {
+        using var scope = app.ApplicationServices.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+        dbContext.Database.Migrate();
+    }
 }

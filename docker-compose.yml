@@ -1,7 +1,7 @@
-version: '3.7'
+﻿version: '3.7'
 
 services:
-  elasticsearch: 
+  elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
     container_name: elasticsearch
     environment:
@@ -33,7 +33,151 @@ services:
       - elasticsearch
     networks:
       - elk_network
+    
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./ApiGateway
+      dockerfile: ApiGateway/Dockerfile
+    container_name: api-gateway
+    ports:
+      - "5271:5271"
+    depends_on:
+      - users-service
+      - tasks-service
+      - notifications-service
+    networks:
+      - backend_network
+  
+  # Users Service
+  users-service:
+    build:
+      context: ./UsersService
+      dockerfile: UsersService.Presentation/Dockerfile
+    container_name: users-service
+    ports:
+      - "5151:5151"
+    networks:
+      - backend_network
+    depends_on:
+      - rabbitmq
+      
+  # Tasks Service
+  tasks-service:
+    build:
+      context: ./TasksService
+      dockerfile: TasksService.Presentation/Dockerfile
+    container_name: tasks-service
+    ports:
+      - "5022:5022"
+    networks:
+      - backend_network
+    depends_on:
+      - redis
+      - rabbitmq
+      - postgres-tasks
+  
+  # Notifications Service
+  notifications-service:
+    build:
+      context: ./NotificationsService
+      dockerfile: NotificationsService.Presentation/Dockerfile
+    container_name: notifications-service
+    ports:
+      - "5255:5255"
+    networks:
+      - backend_network
+    depends_on:
+      - rabbitmq
+      - mongo
+    
+  # gRPC Service
+  grpc-service:
+    build:
+      context: ./UsersService
+      dockerfile: UsersService.Grpc/Dockerfile
+    container_name: grpc-service
+    networks:
+      - backend_network
+    depends_on:
+      - users-service
+      - tasks-service
+  
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - backend_network
+    
+  # MongoDB (для NotificationsService)
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - backend_network
+  
+  postgres-users:
+    image: postgres:latest
+    container_name: postgres-users
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1111
+      POSTGRES_DB: UsersDb
+    ports:
+      - "5432:5432"
+    networks:
+      - backend_network
+    volumes:
+      - postgres_data_users:/var/lib/postgresql/data
+      
+  postgres-tasks:
+    image: postgres:latest
+    container_name: postgres-tasks
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1111
+      POSTGRES_DB: TasksDb
+    ports:
+      - "5433:5432"
+    networks:
+      - backend_network
+    volumes:
+      - postgres_data_tasks:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_taskmanager
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - backend_network
+  
+  # Angular Frontend (использует http-server)
+  angular-frontend:
+    build:
+      context: ../../WebstormProjects/TaskManager
+      dockerfile: Dockerfile
+    container_name: angular-frontend
+    ports:
+      - "4201:4201"
+    networks:
+      - frontend_network
 
 networks:
   elk_network:
     driver: bridge
+  backend_network:
+    driver: bridge 
+  frontend_network:
+    driver: bridge
+      
+volumes:
+  postgres_data_users:
+  postgres_data_tasks:

@@ -23,7 +23,7 @@ public class TaskCreatedConsumer : BackgroundService
     public TaskCreatedConsumer(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        var factory = new ConnectionFactory { HostName = "localhost" };
+        var factory = new ConnectionFactory { HostName = "rabbitmq_taskmanager" };
         _connection = factory.CreateConnection(); 
         _channel = _connection.CreateModel();
 

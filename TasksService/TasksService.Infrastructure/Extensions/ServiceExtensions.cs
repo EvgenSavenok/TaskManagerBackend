@@ -114,4 +114,11 @@ public static class ServiceExtensions
                 .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day);
         });
     }
+    
+    public static void ApplyMigrations(this IApplicationBuilder app)
+    {
+        using var scope = app.ApplicationServices.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+        dbContext.Database.Migrate();
+    }
 }

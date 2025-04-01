@@ -4,6 +4,8 @@ using TasksService.Infrastructure.Grpc;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.UseUrls("http://0.0.0.0:5022"); 
+
 ServiceExtensions.ConfigureSerilog(builder);
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.ConfigureRepositoryManager();
@@ -43,5 +45,7 @@ app.MapControllers();
 app.MapRazorPages();
 
 app.MapGrpcService<GrpcUserService>();
+
+app.ApplyMigrations();
 
 app.Run();

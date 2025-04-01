@@ -20,7 +20,7 @@ public class TaskDeletedConsumer : BackgroundService
     public TaskDeletedConsumer(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        var factory = new ConnectionFactory { HostName = "localhost" };
+        var factory = new ConnectionFactory { HostName = "rabbitmq_taskmanager" };
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();
 

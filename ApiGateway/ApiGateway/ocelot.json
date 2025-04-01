@@ -5,7 +5,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "users-service",
           "Port": 5151
         }
       ],
@@ -18,7 +18,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "users-service",
           "Port": 5151
         }
       ],
@@ -31,7 +31,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "tasks-service",
           "Port": 5022
         }
       ],
@@ -44,7 +44,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "tasks-service",
           "Port": 5022
         }
       ],
@@ -57,7 +57,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "notifications-service",
           "Port": 5255
         }
       ],
@@ -70,7 +70,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "tasks-service",
           "Port": 5022
         }
       ],
@@ -83,7 +83,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "users-service",
           "Port": 5151
         }
       ],
@@ -96,7 +96,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "users-service",
           "Port": 5151
         }
       ],
@@ -106,7 +106,7 @@
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:5271"
+    "BaseUrl": "http://api-gateway:5271"
   }
 }
 

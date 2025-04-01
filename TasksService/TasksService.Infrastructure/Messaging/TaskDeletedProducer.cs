@@ -13,7 +13,7 @@ public class TaskDeletedProducer : ITaskDeletedProducer
     
     public TaskDeletedProducer()
     {
-        var factory = new ConnectionFactory { HostName = "localhost" };
+        var factory = new ConnectionFactory { HostName = "rabbitmq_taskmanager" };
         var connection = factory.CreateConnection();
         _channel = connection.CreateModel();
         _channel.ExchangeDeclare(exchange: ExchangeName, type: ExchangeType.Fanout);
