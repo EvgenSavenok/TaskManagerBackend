@@ -1,3 +1,4 @@
+using Hangfire;
 using MediatR;
 using NotificationsService.Infrastructure.Extensions;
 
@@ -24,6 +25,9 @@ builder.Services.ConfigureSwagger();
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
+
+app.UseHangfireServer();
+//RecurringJob.AddOrUpdate(() => app.Services.UpdateJobGraphState(), Cron.Minutely);
 
 app.ConfigureExceptionHandler();
 

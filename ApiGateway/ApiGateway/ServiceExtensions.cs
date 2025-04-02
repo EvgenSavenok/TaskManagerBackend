@@ -39,9 +39,11 @@ public static class ServiceExtensions
                 policy.WithOrigins(
                     // Angular
                     "http://localhost:4201",
+                    "http://localhost:4200",
                     "http://angular-frontend:4201", 
                     // API Gateway
                     "http://api-gateway:5271", 
+                    "http://localhost:5271",
                     // Users Service
                     "http://localhost:5151", 
                     "http://users-service:5151", 

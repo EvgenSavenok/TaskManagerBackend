@@ -124,7 +124,10 @@ public static class ServiceExtensions
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("UsersPolicy", b =>
-                b.WithOrigins("http://angular-frontend:4201", "http://localhost:4201")
+                b.WithOrigins(
+                        "http://angular-frontend:4201", 
+                        "http://localhost:4200",
+                        "http://localhost:4201")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()); 

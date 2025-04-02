@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using NotificationsService.Application.Contracts.RepositoryContracts;
 using NotificationsService.Application.Contracts.ServicesContracts;
@@ -52,7 +53,19 @@ public static class ServiceExtensions
                 CheckQueuedJobsStrategy = CheckQueuedJobsStrategy.TailNotificationsCollection
             }
         ));
-        services.AddHangfireServer();
+        //services.AddHangfireServer();
+    }
+    
+    public static void UpdateJobGraphState(this IServiceProvider serviceProvider)
+    {
+        var client = new MongoClient("mongodb://mongo:27017");
+        var database = client.GetDatabase("HangfireDb");
+        var collection = database.GetCollection<BsonDocument>("hangfire.jobGraph");
+
+        var filter = Builders<BsonDocument>.Filter.Empty;
+        var update = Builders<BsonDocument>.Update.Set("StateName", "Enqueued").Set("Queue", "default");
+
+        collection.UpdateMany(filter, update);
     }
 
     public static void ConfigureEmailService(this IServiceCollection services)
@@ -118,7 +131,7 @@ public static class ServiceExtensions
                 .WriteTo.Console()
                 .WriteTo.Elasticsearch(
                     new Serilog.Sinks.Elasticsearch.ElasticsearchSinkOptions(
-                        new Uri("http://localhost:9200"))
+                        new Uri("http://notifications-service:9200"))
                 {
                     AutoRegisterTemplate = true,
                     IndexFormat = "microservices-logs-{0:yyyy.MM.dd}"

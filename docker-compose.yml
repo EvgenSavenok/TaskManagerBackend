@@ -166,7 +166,7 @@ services:
       dockerfile: Dockerfile
     container_name: angular-frontend
     ports:
-      - "4201:4201"
+      - "4200:4200"
     networks:
       - frontend_network
 

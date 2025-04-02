@@ -23,7 +23,12 @@ public class TaskUpdatedConsumer : BackgroundService
     public TaskUpdatedConsumer(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        var factory = new ConnectionFactory { HostName = "rabbitmq_taskmanager" };
+        var factory = new ConnectionFactory
+        {
+            HostName = "rabbitmq_taskmanager",
+            UserName = "guest",
+            Password = "guest"
+        };
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();
 
