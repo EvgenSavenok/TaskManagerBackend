@@ -1,6 +1,7 @@
 using Hangfire;
 using MediatR;
 using NotificationsService.Infrastructure.Extensions;
+using NotificationsService.Infrastructure.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,7 @@ builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.ConfigureEmailService();
 builder.Services.ConfigureHangfire(builder.Configuration);
-builder.Services.ConfigureRabbitMq();
+builder.Services.ConfigureRabbitMq(builder.Configuration);
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorPages();

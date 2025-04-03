@@ -26,9 +26,22 @@ public class TaskDeletedConsumer : BackgroundService
             UserName = "guest",
             Password = "guest"
         };
-        _connection = factory.CreateConnection();
-        _channel = _connection.CreateModel();
-
+       
+        for (int i = 0; i < 5; i++)
+        {
+            try
+            {
+                _connection = factory.CreateConnection();
+                _channel = _connection.CreateModel();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"[RabbitMQ] Не удалось подключиться, попытка {i + 1}...");
+                Thread.Sleep(10000); 
+            }
+        }
+        
+        Console.WriteLine("[RabbitMQ] Соединение с RabbitMQ для TaskDeletedConsumer установлено.");
         _channel.ExchangeDeclare(exchange: ExchangeName, type: ExchangeType.Fanout);
         _channel.QueueDeclare(queue: QueueName, durable: true, exclusive: false, autoDelete: false);
         _channel.QueueBind(queue: QueueName, exchange: ExchangeName, routingKey: "");

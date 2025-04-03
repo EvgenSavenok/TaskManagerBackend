@@ -9,6 +9,7 @@ using NotificationsService.Application.DataTransferObjects.TaskEventDto;
 using NotificationsService.Application.UseCases.Commands.NotificationCommands.CreateNotification;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Exceptions;
 
 namespace NotificationsService.Infrastructure.Messaging;
 
@@ -27,9 +28,22 @@ public class TaskCreatedConsumer : BackgroundService
         {
             HostName = "rabbitmq_taskmanager"
         };
-        _connection = factory.CreateConnection();
-        _channel = _connection.CreateModel();
+        
+        for (int i = 0; i < 5; i++)
+        {
+            try
+            {
+                _connection = factory.CreateConnection();
+                _channel = _connection.CreateModel();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"[RabbitMQ] Не удалось подключиться, попытка {i + 1}...");
+                Thread.Sleep(10000); 
+            }
+        }
 
+        Console.WriteLine("[RabbitMQ] Соединение с RabbitMQ для TaskCreatedConsumer установлено.");
         _channel.ExchangeDeclare(exchange: ExchangeName, type: ExchangeType.Fanout);
         _channel.QueueDeclare(queue: QueueName, durable: true, exclusive: false, autoDelete: false);
         _channel.QueueBind(queue: QueueName, exchange: ExchangeName, routingKey: "");

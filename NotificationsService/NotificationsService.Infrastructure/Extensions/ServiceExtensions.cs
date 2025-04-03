@@ -17,6 +17,7 @@ using NotificationsService.Application.EmailService;
 using NotificationsService.Application.Validation;
 using NotificationsService.Infrastructure.Messaging;
 using NotificationsService.Infrastructure.Repositories;
+using RabbitMQ.Client;
 using Serilog;
 
 namespace NotificationsService.Infrastructure.Extensions;
@@ -115,11 +116,11 @@ public static class ServiceExtensions
             });
     }
 
-    public static void ConfigureRabbitMq(this IServiceCollection services)
+    public static void ConfigureRabbitMq(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddHostedService<TaskCreatedConsumer>();
-        services.AddHostedService<TaskUpdatedConsumer>();
-        services.AddHostedService<TaskDeletedConsumer>();
+         services.AddHostedService<TaskCreatedConsumer>();
+         services.AddHostedService<TaskUpdatedConsumer>();
+         services.AddHostedService<TaskDeletedConsumer>();
     }
     
     public static void ConfigureSerilog(WebApplicationBuilder builder)
