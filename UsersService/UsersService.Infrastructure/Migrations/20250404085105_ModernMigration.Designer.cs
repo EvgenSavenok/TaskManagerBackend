@@ -12,8 +12,8 @@ using UsersService.Infrastructure;
 namespace UsersService.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20250403192827_ModernMigration1")]
-    partial class ModernMigration1
+    [Migration("20250404085105_ModernMigration")]
+    partial class ModernMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
