@@ -12,7 +12,7 @@ using TasksService.Infrastructure;
 namespace TasksService.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20250404085217_ModernMigration")]
+    [Migration("20250404091629_ModernMigration")]
     partial class ModernMigration
     {
         /// <inheritdoc />

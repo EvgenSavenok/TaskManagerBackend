@@ -12,7 +12,7 @@ using UsersService.Infrastructure;
 namespace UsersService.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20250404085105_ModernMigration")]
+    [Migration("20250404091859_ModernMigration")]
     partial class ModernMigration
     {
         /// <inheritdoc />
