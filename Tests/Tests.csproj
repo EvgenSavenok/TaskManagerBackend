@@ -22,7 +22,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\NotificationsService\NotificationsService.Application\NotificationsService.Application.csproj" />
       <ProjectReference Include="..\TasksService\TasksService.Infrastructure\TasksService.Infrastructure.csproj" />
+      <ProjectReference Include="..\UsersService\UsersService.Application\UsersService.Application.csproj" />
+      <ProjectReference Include="..\UsersService\UsersService.Domain\UsersService.Domain.csproj" />
     </ItemGroup>
 
 </Project>

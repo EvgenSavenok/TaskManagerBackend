@@ -9,8 +9,7 @@ namespace Application.UseCases.Queries.TaskQueries.GetAllTasks;
 
 public class GetAllTasksQueryHandler(
     IRepositoryManager repository,
-    IMapper mapper,
-    IRedisCacheService cache)
+    IMapper mapper)
     : IRequestHandler<GetAllTasksQuery, IEnumerable<TaskDto>>
 {
     public async Task<IEnumerable<TaskDto>> Handle(GetAllTasksQuery query, CancellationToken cancellationToken)

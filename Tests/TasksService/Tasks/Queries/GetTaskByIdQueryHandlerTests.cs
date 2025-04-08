@@ -1,7 +1,5 @@
 ﻿using Application.Contracts.Redis;
 using Application.Contracts.RepositoryContracts;
-using Application.DataTransferObjects.CommentsDto;
-using Application.DataTransferObjects.TagsDto;
 using Application.DataTransferObjects.TasksDto;
 using Application.UseCases.Queries.TaskQueries.GetTaskById;
 using AutoMapper;
@@ -11,7 +9,7 @@ using TasksService.Domain.CustomExceptions;
 using TasksService.Domain.Enums;
 using TasksService.Domain.Models;
 
-namespace Tests.TasksService;
+namespace Tests.TasksService.Tasks.Queries;
 
 public class GetTaskByIdQueryHandlerTests
 {
