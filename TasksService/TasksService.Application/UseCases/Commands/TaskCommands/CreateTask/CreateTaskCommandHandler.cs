@@ -15,9 +15,9 @@ public class CreateTaskCommandHandler(
     IValidator<CustomTask> validator,
     ITaskCreatedProducer taskCreatedProducer,
     IUserGrpcService userGrpcService)
-    : IRequestHandler<CreateTaskCommand>
+    : IRequestHandler<CreateTaskCommand, CreateTaskResponseDto>
 {
-    public async Task<Unit> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
+    public async Task<CreateTaskResponseDto> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
         var taskEntity = mapper.Map<CustomTask>(request);
         
@@ -45,6 +45,6 @@ public class CreateTaskCommandHandler(
         
         taskCreatedProducer.PublishTaskCreatedEvent(taskEventDto);
         
-        return Unit.Value; 
+        return new CreateTaskResponseDto() { TaskId = taskEntity.Id };
     }
 }

@@ -52,9 +52,12 @@ public class TasksController(
         {
             TaskDto = taskDto
         };
-        await mediator.Send(command);
+        var createTaskResponse = await mediator.Send(command);
         
-        return NoContent();
+        // ToDo 
+        // Need to find solution to avoid of string in response
+        // Need to use JSON instead
+        return Ok(createTaskResponse.TaskId.ToString());
     }
 
     [HttpPut("updateTask")]

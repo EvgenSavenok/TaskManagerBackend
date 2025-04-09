@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{FFD629C1-2E62-48AB-A25C-01FF7B3C73CE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TasksService.Presentation", "TasksService\TasksService.Presentation\TasksService.Presentation.csproj", "{6E4CAA6A-208F-434F-B7DA-89E397EE6DE4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TasksService", "TasksService", "{F45492EB-354C-400D-BE22-523520AA1CCB}"
@@ -38,16 +36,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateway", "ApiGateway", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "ApiGateway\ApiGateway\ApiGateway.csproj", "{02729A0B-89C1-45BE-ABEA-405F36707AEC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BFA5F39D-A834-42E9-B62D-A2B8E6F55069}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleTests", "Tests\ModuleTests\ModuleTests.csproj", "{29241A15-834B-48B4-8B4C-84010D27A50E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "IntegrationTests\IntegrationTests.csproj", "{E4C50E6E-A49D-4F95-9100-F3FA05FCFE29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FFD629C1-2E62-48AB-A25C-01FF7B3C73CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFD629C1-2E62-48AB-A25C-01FF7B3C73CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FFD629C1-2E62-48AB-A25C-01FF7B3C73CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FFD629C1-2E62-48AB-A25C-01FF7B3C73CE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6E4CAA6A-208F-434F-B7DA-89E397EE6DE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6E4CAA6A-208F-434F-B7DA-89E397EE6DE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E4CAA6A-208F-434F-B7DA-89E397EE6DE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -104,6 +104,14 @@ Global
 		{02729A0B-89C1-45BE-ABEA-405F36707AEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02729A0B-89C1-45BE-ABEA-405F36707AEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02729A0B-89C1-45BE-ABEA-405F36707AEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29241A15-834B-48B4-8B4C-84010D27A50E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29241A15-834B-48B4-8B4C-84010D27A50E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29241A15-834B-48B4-8B4C-84010D27A50E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29241A15-834B-48B4-8B4C-84010D27A50E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4C50E6E-A49D-4F95-9100-F3FA05FCFE29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4C50E6E-A49D-4F95-9100-F3FA05FCFE29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4C50E6E-A49D-4F95-9100-F3FA05FCFE29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4C50E6E-A49D-4F95-9100-F3FA05FCFE29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6E4CAA6A-208F-434F-B7DA-89E397EE6DE4} = {F45492EB-354C-400D-BE22-523520AA1CCB}
@@ -120,5 +128,7 @@ Global
 		{07C264B3-8A6D-46D3-895C-C5E65C797B17} = {75CA7CE9-FF79-4628-8397-70C125C05800}
 		{4999327B-E0B2-4757-BDB7-CA7441368E37} = {75CA7CE9-FF79-4628-8397-70C125C05800}
 		{02729A0B-89C1-45BE-ABEA-405F36707AEC} = {F9D03B11-9A14-4DF0-8165-F7E20B3C85D8}
+		{29241A15-834B-48B4-8B4C-84010D27A50E} = {BFA5F39D-A834-42E9-B62D-A2B8E6F55069}
+		{E4C50E6E-A49D-4F95-9100-F3FA05FCFE29} = {BFA5F39D-A834-42E9-B62D-A2B8E6F55069}
 	EndGlobalSection
 EndGlobal
