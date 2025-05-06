@@ -1,5 +1,6 @@
 ﻿using Application.Contracts.Redis;
 using Application.Contracts.RepositoryContracts;
+using Application.DataTransferObjects.TagsDto;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
@@ -13,9 +14,9 @@ public class CreateTagCommandHandler(
     IMapper mapper,
     IRedisCacheService cache,
     IValidator<Tag> validator)
-    : IRequestHandler<CreateTagCommand>
+    : IRequestHandler<CreateTagCommand, Tag>
 {
-    public async Task<Unit> Handle(CreateTagCommand request, CancellationToken cancellationToken)
+    public async Task<Tag> Handle(CreateTagCommand request, CancellationToken cancellationToken)
     {
         var tagEntity = mapper.Map<Tag>(request);
         var validationResult = await validator.ValidateAsync(tagEntity, cancellationToken);
@@ -39,7 +40,7 @@ public class CreateTagCommandHandler(
         
         string cacheKey = "tags: all";
         await cache.RemoveAsync(cacheKey);
-
-        return Unit.Value;
+        
+        return tagEntity;
     }
 }

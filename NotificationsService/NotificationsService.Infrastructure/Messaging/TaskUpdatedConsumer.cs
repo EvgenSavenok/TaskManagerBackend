@@ -23,10 +23,28 @@ public class TaskUpdatedConsumer : BackgroundService
     public TaskUpdatedConsumer(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        var factory = new ConnectionFactory { HostName = "localhost" };
-        _connection = factory.CreateConnection();
-        _channel = _connection.CreateModel();
+        var factory = new ConnectionFactory
+        {
+            HostName = "rabbitmq_taskmanager",
+            UserName = "guest",
+            Password = "guest"
+        };
+        
+        for (int i = 0; i < 5; i++)
+        {
+            try
+            {
+                _connection = factory.CreateConnection();
+                _channel = _connection.CreateModel();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"[RabbitMQ] Не удалось подключиться, попытка {i + 1}...");
+                Thread.Sleep(10000); 
+            }
+        }
 
+        Console.WriteLine("[RabbitMQ] Соединение с RabbitMQ для TaskUpdatedConsumer установлено.");
         _channel.ExchangeDeclare(exchange: ExchangeName, type: ExchangeType.Fanout);
         _channel.QueueDeclare(queue: QueueName, durable: true, exclusive: false, autoDelete: false);
         _channel.QueueBind(queue: QueueName, exchange: ExchangeName, routingKey: "");

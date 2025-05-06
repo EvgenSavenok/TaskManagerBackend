@@ -64,9 +64,12 @@ public class TagsController(
         {
             TagName = tagDto.TagName
         };
-        await mediator.Send(command, cancellationToken);
+        var createdTagDto = await mediator.Send(command, cancellationToken);
         
-        return NoContent();
+        // ToDo 
+        // Need to find solution to avoid of string in response
+        // Need to use JSON instead
+        return Ok(createdTagDto.Id.ToString());
     }
     
     [HttpPut("updateTag/{tagId}")]

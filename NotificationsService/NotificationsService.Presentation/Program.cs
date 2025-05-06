@@ -1,8 +1,11 @@
 using Hangfire;
 using MediatR;
 using NotificationsService.Infrastructure.Extensions;
+using NotificationsService.Infrastructure.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.UseUrls("http://0.0.0.0:5255"); 
 
 ServiceExtensions.ConfigureSerilog(builder);
 builder.Services.AddMongoDb(builder.Configuration);
@@ -14,7 +17,7 @@ builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.ConfigureEmailService();
 builder.Services.ConfigureHangfire(builder.Configuration);
-builder.Services.ConfigureRabbitMq();
+builder.Services.ConfigureRabbitMq(builder.Configuration);
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorPages();
@@ -23,6 +26,9 @@ builder.Services.ConfigureSwagger();
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
+
+app.UseHangfireServer();
+//RecurringJob.AddOrUpdate(() => app.Services.UpdateJobGraphState(), Cron.Minutely);
 
 app.ConfigureExceptionHandler();
 

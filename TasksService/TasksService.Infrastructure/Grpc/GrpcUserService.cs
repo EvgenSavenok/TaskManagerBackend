@@ -8,7 +8,7 @@ public class GrpcUserService : IUserGrpcService
 {
     public async Task<string> GetUserEmailAsync(string userId)
     {
-        var channel = GrpcChannel.ForAddress("http://localhost:5220"); 
+        var channel = GrpcChannel.ForAddress("http://grpc-service:5220"); 
         var client = new UserService.UserServiceClient(channel);
 
         var request = new GetUserEmailRequest { UserId = userId };

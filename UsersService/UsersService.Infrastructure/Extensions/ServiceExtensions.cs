@@ -110,7 +110,7 @@ public static class ServiceExtensions
                 .WriteTo.Console()
                 .WriteTo.Elasticsearch(
                     new Serilog.Sinks.Elasticsearch.ElasticsearchSinkOptions(
-                        new Uri("http://localhost:9200"))
+                        new Uri("http://elasticsearch:9200"))
                 {
                     AutoRegisterTemplate = true,
                     IndexFormat = "microservices-logs-{0:yyyy.MM.dd}"
@@ -124,7 +124,10 @@ public static class ServiceExtensions
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("UsersPolicy", b =>
-                b.WithOrigins("http://localhost:4200")
+                b.WithOrigins(
+                        "http://angular-frontend:4201", 
+                        "http://localhost:4200",
+                        "http://localhost:4201")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()); 
@@ -138,5 +141,12 @@ public static class ServiceExtensions
             {
                 options.Cookie.Name = "refreshToken";
             });
+    }
+    
+    public static void ApplyMigrations(this IApplicationBuilder app)
+    {
+        using var scope = app.ApplicationServices.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+        dbContext.Database.Migrate();
     }
 }
