@@ -1,38 +1,38 @@
 ﻿version: '3.7'
 
 services:
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
-    container_name: elasticsearch
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-    ports:
-      - "9200:9200"
-    networks:
-      - elk_network
+#  elasticsearch:
+#    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
+#    container_name: elasticsearch
+#    environment:
+#      - discovery.type=single-node
+#      - xpack.security.enabled=false
+#    ports:
+#      - "9200:9200"
+#    networks:
+#      - elk_network
 
-  logstash:
-    image: docker.elastic.co/logstash/logstash:8.6.2
-    container_name: logstash
-    volumes:
-      - ./logstash/pipeline:/usr/share/logstash/pipeline
-    ports:
-      - "5044:5044"
-    depends_on:
-      - elasticsearch
-    networks:
-      - elk_network
+#  logstash:
+#    image: docker.elastic.co/logstash/logstash:8.6.2
+#    container_name: logstash
+#    volumes:
+#      - ./logstash/pipeline:/usr/share/logstash/pipeline
+#    ports:
+#      - "5044:5044"
+#    depends_on:
+#      - elasticsearch
+#    networks:
+#      - elk_network
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.6.2
-    container_name: kibana
-    ports:
-      - "5601:5601"
-    depends_on:
-      - elasticsearch
-    networks:
-      - elk_network
+#  kibana:
+#    image: docker.elastic.co/kibana/kibana:8.6.2
+#    container_name: kibana
+#    ports:
+#      - "5601:5601"
+#    depends_on:
+#      - elasticsearch
+#    networks:
+#      - elk_network
     
   # API Gateway
   api-gateway:
@@ -121,7 +121,7 @@ services:
       - backend_network
   
   postgres-users:
-    image: postgres:latest
+    image: postgres:17
     container_name: postgres-users
     restart: always
     environment:
@@ -136,7 +136,7 @@ services:
       - postgres_data_users:/var/lib/postgresql/data
       
   postgres-tasks:
-    image: postgres:latest
+    image: postgres:17
     container_name: postgres-tasks
     restart: always
     environment:
@@ -171,8 +171,8 @@ services:
       - frontend_network
 
 networks:
-  elk_network:
-    driver: bridge
+#  elk_network:
+#    driver: bridge
   backend_network:
     driver: bridge 
   frontend_network:
