@@ -28,7 +28,7 @@ public class RepositoryManager(ApplicationContext repositoryContext) : IReposito
             return _tagRepository;
         }
     }
-
+    
     public ICommentsRepository Comment
     {
         get

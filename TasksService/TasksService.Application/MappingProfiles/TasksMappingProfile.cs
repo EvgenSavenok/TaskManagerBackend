@@ -26,14 +26,14 @@ public class TasksMappingProfile : Profile
                     Content = commentDto.Content
                 }).ToList()))
             .ReverseMap();
-
+        
         CreateMap<CreateTaskCommand, CustomTask>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()))
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.TaskDto.Title))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.TaskDto.Description))
             .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.TaskDto.CategoryId))
-            .ForMember(dest => dest.Category, opt => opt.Ignore())
+            .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.TaskDto.Category))
             .ForMember(dest => dest.Priority, opt => opt.MapFrom(src => src.TaskDto.Priority))
             .ForMember(dest => dest.MinutesBeforeDeadline, opt => opt.MapFrom(src => src.TaskDto.MinutesBeforeDeadline))
             .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.TaskDto.Deadline))
@@ -48,10 +48,10 @@ public class TasksMappingProfile : Profile
                 src.TaskDto.TaskComments.Select(commentDto => new Comment
                 {
                     Id = commentDto.CommentId,
-                    Content = commentDto.Content,
-                    CreatedAt = DateTime.UtcNow
+                    Content = commentDto.Content, 
+                    CreatedAt = DateTime.UtcNow 
                 }).ToList()));
-
+        
         CreateMap<UpdateTaskCommand, CustomTask>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.TaskDto.TaskId))
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
@@ -62,11 +62,11 @@ public class TasksMappingProfile : Profile
             .ForMember(dest => dest.Priority, opt => opt.MapFrom(src => src.TaskDto.Priority))
             .ForMember(dest => dest.MinutesBeforeDeadline, opt => opt.MapFrom(src => src.TaskDto.MinutesBeforeDeadline))
             .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.TaskDto.Deadline))
-            .ForMember(dest => dest.TaskTags, opt => opt.MapFrom(src =>
-                src.TaskDto.TaskTags.Select(tagDto => new Tag
-                {
+            .ForMember(dest => dest.TaskTags, opt => opt.MapFrom(src => 
+                src.TaskDto.TaskTags.Select(tagDto => new Tag 
+                { 
                     Id = tagDto.Id,
-                    Name = tagDto.TagName
+                    Name = tagDto.TagName 
                 }).ToList()))
             .ForMember(dest => dest.TaskComments, opt => opt.MapFrom(src => src.TaskDto.TaskComments));
 

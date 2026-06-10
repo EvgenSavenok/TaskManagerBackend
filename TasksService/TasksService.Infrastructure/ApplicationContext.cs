@@ -12,8 +12,8 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options) : 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
 
         modelBuilder.Entity<CustomTask>()
-            .HasMany(t => t.TaskTags)
-            .WithMany(t => t.TaskTags)
+            .HasMany(t => t.TaskTags)  
+            .WithMany(t => t.TaskTags) 
             .UsingEntity<Dictionary<string, object>>(
                 "CustomTaskTag",
                 j => j.HasOne<Tag>().WithMany().HasForeignKey("TagId"),
@@ -25,11 +25,11 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options) : 
             .HasForeignKey(t => t.CategoryId)
             .OnDelete(DeleteBehavior.Restrict);
     }
-
+    
     public DbSet<CustomTask> Tasks { get; set; }
-
+    
     public DbSet<Tag> Tags { get; set; }
-
+    
     public DbSet<Comment> Comments { get; set; }
 
     public DbSet<Category> Categories { get; set; }

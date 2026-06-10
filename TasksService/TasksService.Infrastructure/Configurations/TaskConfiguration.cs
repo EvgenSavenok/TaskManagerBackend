@@ -15,5 +15,6 @@ public class TaskConfiguration : IEntityTypeConfiguration<CustomTask>
         builder.Property(task => task.CreatedAt).IsRequired();
         builder.Property(task => task.Deadline).IsRequired();
         builder.Property(task => task.CategoryId).IsRequired();
+        builder.Property(task => task.Category).IsRequired();
     }
 }

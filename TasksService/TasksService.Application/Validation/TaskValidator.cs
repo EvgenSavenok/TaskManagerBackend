@@ -24,7 +24,7 @@ public class TaskValidator : AbstractValidator<CustomTask>
             .Must((task, deadline) => (deadline - task.CreatedAt).TotalMinutes >= 1)
             .WithMessage("The difference between CreatedAt and Deadline must be at least one minute.");
         
-        RuleFor(task => task.CategoryId)
+        RuleFor(task => task.Category)
             .NotEmpty().WithMessage("Category is required.");
         
         RuleFor(task => task.Priority)
