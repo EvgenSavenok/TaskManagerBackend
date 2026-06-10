@@ -1,0 +1,51 @@
+# Rider/IDEA project settings
+.idea/
+
+# Build output
+bin/
+obj/
+out/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vscode/
+
+# Rider-specific files
+*.iml
+
+# Logs, database, and temporary files
+*.log
+*.bak
+*.db
+*.sqlite
+*.swp
+*.swn
+
+# Temporary files
+*.tmp
+*.cache
+*.pid
+*.seed
+*.tar
+
+# Ignore test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Ignore packages
+packages/
+!packages/repositories.config
+
+# Ignore build artifacts
+build/
+dist/
+publish/
+
+# Ignore Docker files
+**/docker-compose.override.yml
+**/docker-compose.override.yaml
